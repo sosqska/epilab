@@ -16,7 +16,7 @@ export function Footer() {
     <footer className="border-t border-line bg-cream">
       <Container className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.2fr_1.2fr] lg:gap-10">
         <div className="space-y-5">
-          <Logo label={t.nav.logoLabel} className="w-fit" />
+          <Logo label={t.nav.logoLabel} full />
           <p className="max-w-xs text-sm">{t.footer.about}</p>
           <div className="flex gap-3">
             <a

@@ -26,7 +26,7 @@ export const site = {
 export const contact = {
   phone: { display: "+48 [numer telefonu]", href: "tel:+48000000000" },
   email: { display: "[adres e-mail]", href: "mailto:[adres-e-mail]" },
-  instagram: { handle: "@[profil_instagram]", href: "https://www.instagram.com/" },
+  instagram: { handle: "@epilab.as", href: "https://www.instagram.com/epilab.as/" },
   facebook: { handle: "[profil Facebook]", href: "https://www.facebook.com/" },
   address: {
     street: "ul. [adres studia]",
@@ -50,6 +50,8 @@ export const images = {
   electrodeHold: { src: `${basePath}/images/electrode-hold.webp`, width: 852, height: 1280 },
   electrodeDetail: { src: `${basePath}/images/electrode-detail.webp`, width: 852, height: 1280 },
   razorVsElectrode: { src: `${basePath}/images/razor-vs-electrode.webp`, width: 720, height: 1130 },
+  logoMark: { src: `${basePath}/images/logo-mark.png`, width: 240, height: 232 },
+  logoFull: { src: `${basePath}/images/logo-full.png`, width: 360, height: 442 },
   monogram: { src: `${basePath}/images/logo-monogram.webp`, width: 600, height: 600 },
 } as const;
 
