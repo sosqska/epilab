@@ -240,11 +240,15 @@ export function BookingFlow() {
       .join("\n");
   }, [service, date, time, dateLabel, areas, details]);
 
-  // Runs inside the link's click, so the copy happens before the browser switches to Instagram.
-  function sendViaInstagram() {
-    setCopied(copyText(message));
+  // Confirming shows the "almost done" instructions first; the chat only opens from there.
+  function confirmViaInstagram() {
     clearDraft();
     setStatus("success");
+  }
+
+  // Runs inside the link's click, so the copy happens before the browser switches to Instagram.
+  function openChat() {
+    setCopied(copyText(message));
   }
 
   function reset() {
@@ -263,7 +267,8 @@ export function BookingFlow() {
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (step < 3) next();
-    else if (!bookingViaInstagram) void confirm();
+    else if (bookingViaInstagram) confirmViaInstagram();
+    else void confirm();
   }
 
   if (status === "success" && bookingViaInstagram) {
@@ -277,38 +282,41 @@ export function BookingFlow() {
           <h2 ref={headingRef} tabIndex={-1} className="mt-6 text-center text-4xl outline-none md:text-5xl">
             {ig.successTitle}
           </h2>
-          {copied === false ? (
-            <div className="mt-6">
+          <p className="mx-auto mt-4 max-w-md text-center">{ig.successText.replace("{handle}", contact.instagram.handle)}</p>
+          <ol className="mx-auto mt-6 max-w-sm space-y-3">
+            {ig.steps.map((s, i) => (
+              <li key={s} className="flex items-center gap-4">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-rose-dark font-serif text-white">{i + 1}</span>
+                <span className="text-ink">{s}</span>
+              </li>
+            ))}
+          </ol>
+
+          <div className="mx-auto mt-8 flex max-w-sm flex-col">
+            <ButtonLink href={contact.instagram.dm} external icon="none" onClick={openChat} className="w-full">
+              <InstagramIcon className="size-[1.1rem]" />
+              {ig.openChat}
+            </ButtonLink>
+          </div>
+          {copied === false && (
+            <div className="mx-auto mt-4 max-w-sm">
               <FormAlert tone="error">{ig.copyFailed}</FormAlert>
             </div>
-          ) : (
-            <>
-              <p className="mx-auto mt-4 max-w-md text-center">{ig.successText.replace("{handle}", contact.instagram.handle)}</p>
-              <ol className="mx-auto mt-6 max-w-sm space-y-3">
-                {ig.steps.map((s, i) => (
-                  <li key={s} className="flex items-center gap-4">
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-rose-dark font-serif text-white">{i + 1}</span>
-                    <span className="text-ink">{s}</span>
-                  </li>
-                ))}
-              </ol>
-            </>
           )}
 
-          <pre className="mt-8 rounded-2xl bg-cream p-5 font-sans text-sm leading-relaxed whitespace-pre-wrap text-ink">
-            {message}
-          </pre>
-
-          <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
-            <ButtonLink href={contact.instagram.dm} external icon="none" onClick={() => setCopied(copyText(message))}>
-              <InstagramIcon className="size-[1.1rem]" />
-              {ig.openAgain}
-            </ButtonLink>
-            <Button variant="outline" onClick={() => setCopied(copyText(message))}>
+          <div className="mt-10 flex items-center justify-between gap-4">
+            <p className="text-xs font-medium tracking-[0.18em] text-muted uppercase">{ig.previewTitle}</p>
+            <button
+              type="button"
+              onClick={() => setCopied(copyText(message))}
+              className="inline-flex items-center gap-1.5 text-sm text-rose-ink underline-offset-4 hover:underline"
+            >
               {copied ? <Check className="size-4" strokeWidth={2} aria-hidden /> : <Copy className="size-4" strokeWidth={1.5} aria-hidden />}
               {copied ? ig.copied : ig.copyAgain}
-            </Button>
+            </button>
           </div>
+          <pre className="mt-3 rounded-2xl bg-cream p-5 font-sans text-sm leading-relaxed whitespace-pre-wrap text-ink">{message}</pre>
+
           <div className="mt-6 flex justify-center gap-6">
             <Button variant="ghost" onClick={reset}>
               {b.success.another}
@@ -646,15 +654,6 @@ export function BookingFlow() {
             ) : (
               <span />
             )}
-            {step === 3 && bookingViaInstagram ? (
-              <div className="flex flex-col items-end gap-2">
-                <ButtonLink href={contact.instagram.dm} external icon="none" onClick={sendViaInstagram}>
-                  <InstagramIcon className="size-[1.1rem]" />
-                  {b.instagram.send}
-                </ButtonLink>
-                <p className="max-w-xs text-right text-xs text-muted">{b.instagram.hint.replace("{handle}", contact.instagram.handle)}</p>
-              </div>
-            ) : (
             <Button type="submit" disabled={status === "sending"} aria-busy={status === "sending"}>
               {status === "sending" ? (
                 <>
@@ -668,11 +667,15 @@ export function BookingFlow() {
                 </>
               ) : status === "error" ? (
                 b.error.retry
+              ) : bookingViaInstagram ? (
+                <>
+                  {b.instagram.confirm}
+                  <Check className="size-4" strokeWidth={2} aria-hidden />
+                </>
               ) : (
                 b.confirm
               )}
             </Button>
-            )}
           </div>
         </form>
 

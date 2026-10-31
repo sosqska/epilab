@@ -533,14 +533,17 @@ export const pl = {
     },
     instagram: {
       notice: "Rezerwacja trafia do nas jako wiadomość na Instagramie. Wybrany termin jest wstępny — potwierdzimy go w odpowiedzi.",
-      send: "Wyślij przez Instagram",
-      hint: "Tekst rezerwacji zostanie skopiowany, a my otworzymy czat z {handle}.",
+      confirm: "Potwierdź",
       previewTitle: "Treść wiadomości",
       successTitle: "Prawie gotowe!",
-      successText: "Tekst rezerwacji jest już skopiowany. W czacie z {handle}:",
-      steps: ["Przytrzymaj palec na polu wiadomości", "Wybierz „Wklej”", "Wyślij — odpiszemy z potwierdzeniem terminu"],
-      copyFailed: "Nie udało się skopiować automatycznie — skopiuj tekst poniżej i wklej go w czacie.",
-      openAgain: "Otwórz czat",
+      successText: "Ostatni krok — wyślij nam rezerwację w wiadomości na Instagramie ({handle}):",
+      steps: [
+        "Kliknij „Otwórz czat” — tekst rezerwacji skopiuje się sam",
+        "W czacie przytrzymaj palec na polu wiadomości i wybierz „Wklej”",
+        "Wyślij — odpiszemy z potwierdzeniem terminu",
+      ],
+      copyFailed: "Nie udało się skopiować automatycznie — kliknij „Skopiuj tekst” poniżej i wklej go w czacie.",
+      openChat: "Otwórz czat",
       copyAgain: "Skopiuj tekst",
       copied: "Skopiowano",
       message: {
