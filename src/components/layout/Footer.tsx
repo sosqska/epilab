@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { contact, credit, routes, site } from "@/content/site";
 import { getDictionary } from "@/i18n";
 import { localePath, type Locale } from "@/i18n/config";
 import { Container } from "@/components/ui/Container";
 import { ScriptNote } from "@/components/ui/ScriptNote";
-import { FacebookIcon, InstagramIcon } from "@/components/ui/icons";
+import { InstagramIcon } from "@/components/ui/icons";
 import { Logo } from "./Logo";
 import { OpeningHours } from "@/components/sections/OpeningHours";
 
@@ -20,26 +20,15 @@ export function Footer({ locale }: { locale: Locale }) {
         <div className="space-y-5">
           <Logo label={t.nav.logoLabel} href={lp("/")} full />
           <p className="max-w-xs text-sm">{t.footer.about}</p>
-          <div className="flex gap-3">
-            <a
-              href={contact.instagram.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="inline-flex size-10 items-center justify-center rounded-full border border-line text-rose-ink transition-colors hover:border-rose-dark hover:bg-white"
-            >
-              <InstagramIcon className="size-[1.1rem]" />
-            </a>
-            <a
-              href={contact.facebook.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-              className="inline-flex size-10 items-center justify-center rounded-full border border-line text-rose-ink transition-colors hover:border-rose-dark hover:bg-white"
-            >
-              <FacebookIcon className="size-[1.1rem]" />
-            </a>
-          </div>
+          <a
+            href={contact.instagram.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram"
+            className="inline-flex size-10 items-center justify-center rounded-full border border-line text-rose-ink transition-colors hover:border-rose-dark hover:bg-white"
+          >
+            <InstagramIcon className="size-[1.1rem]" />
+          </a>
         </div>
 
         <nav aria-label={t.footer.navHeading}>
@@ -78,6 +67,12 @@ export function Footer({ locale }: { locale: Locale }) {
               </a>
             </li>
             <li className="flex gap-3">
+              <Mail className="mt-0.5 size-4 shrink-0 text-rose-dark" strokeWidth={1.5} aria-hidden />
+              <a href={contact.email.href} className="break-all hover:text-rose-ink">
+                {contact.email.display}
+              </a>
+            </li>
+            <li className="flex gap-3">
               <InstagramIcon className="mt-0.5 size-4 shrink-0 text-rose-dark" />
               <a href={contact.instagram.href} target="_blank" rel="noopener noreferrer" className="hover:text-rose-ink">
                 {contact.instagram.handle}
@@ -96,9 +91,17 @@ export function Footer({ locale }: { locale: Locale }) {
 
       <div className="border-t border-line/80">
         <Container className="flex flex-col gap-3 py-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {year} {site.name}. {t.footer.rights}
-          </p>
+          <div className="space-y-1">
+            <p>
+              © {year} {site.name}. {t.footer.rights}
+            </p>
+            <p>
+              {t.footer.owner}: {site.owner} · {contact.address.street}, {contact.address.city} ·{" "}
+              <a href={contact.email.href} className="hover:text-rose-ink">
+                {contact.email.display}
+              </a>
+            </p>
+          </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
             <Link href={lp("/polityka-prywatnosci")} className="hover:text-rose-ink">
               {t.footer.privacy}

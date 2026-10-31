@@ -4,16 +4,8 @@
  * (it only needs to return "HH:MM" start times for a given day and duration).
  */
 
-// [Example schedule — adjust to the studio's real hours.] Index = Date#getDay() (0 = Sunday).
-export const schedule: Array<{ open: number; close: number } | null> = [
-  null,
-  { open: 9, close: 19 },
-  { open: 9, close: 19 },
-  { open: 9, close: 19 },
-  { open: 9, close: 19 },
-  { open: 9, close: 19 },
-  { open: 9, close: 14 },
-];
+// Matches contact.hours (daily 09:00–20:00). Index = Date#getDay() (0 = Sunday); null = closed.
+export const schedule: Array<{ open: number; close: number } | null> = Array.from({ length: 7 }, () => ({ open: 9, close: 20 }));
 
 export const bookingWindowDays = 60;
 const slotStep = 30;

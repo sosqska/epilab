@@ -1,13 +1,16 @@
 /**
- * Client reviews. Add real, consented reviews here — empty entries render as marked placeholders.
- * Set `verified: true` only for reviews you can point to (e.g. Google, Instagram); only those show stars.
+ * Client reviews. Add only real reviews, published with the client's consent, and give each one a source
+ * people can check: a `url` to the original (Google review, Instagram post/story highlight) and/or a
+ * `screenshot` (put the image in public/images/reviews/ and use e.g. "reviews/anna.webp").
+ * While the list is empty, the home page hides its reviews section and /opinie points to Instagram.
  */
 export type Review = {
-  text?: string;
-  author?: string;
+  text: string;
+  author: string;
+  source: "google" | "instagram";
   rating?: 1 | 2 | 3 | 4 | 5;
-  verified?: boolean;
-  source?: "google" | "instagram" | "direct";
+  url?: string;
+  screenshot?: string;
 };
 
-export const reviews: Review[] = [{}, {}, {}, {}, {}, {}];
+export const reviews: Review[] = [];

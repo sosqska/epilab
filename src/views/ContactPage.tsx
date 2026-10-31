@@ -1,4 +1,4 @@
-import { Clock, Mail, MapPin, Navigation, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import type { ReactNode } from "react";
 import { contact } from "@/content/site";
 import { getDictionary } from "@/i18n";
@@ -93,18 +93,6 @@ export function ContactPage({ locale }: { locale: Locale }) {
                 className="block h-80 w-full grayscale-[35%] sepia-[15%]"
               />
             </div>
-
-            <section aria-labelledby="directions-title" className="reveal rounded-[2rem] bg-cream p-7 md:p-8">
-              <h2 id="directions-title" className="flex items-center gap-3 text-3xl">
-                <Navigation className="size-5 text-rose-dark" strokeWidth={1.25} aria-hidden />
-                {c.directions.title}
-              </h2>
-              <ul className="mt-4 space-y-2 text-[0.95rem] text-muted italic">
-                {c.directions.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </section>
           </div>
 
           <section

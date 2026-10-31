@@ -6,7 +6,8 @@ import { CircleCheck, LoaderCircle } from "lucide-react";
 import type { Dictionary } from "@/i18n";
 import { useDictionary, useLocale } from "@/i18n/client";
 import { localePath } from "@/i18n/config";
-import { isContactDemo, sendContactMessage, type ContactPayload } from "@/lib/submit";
+import { contact } from "@/content/site";
+import { contactViaEmail, sendContactMessage, type ContactPayload } from "@/lib/submit";
 import { focusFirstError, isEmail, isPhone, type Errors } from "@/lib/validation";
 import { Button } from "@/components/ui/Button";
 import { CheckboxField, FormAlert, SelectField, TextArea, TextField } from "./Field";
@@ -57,9 +58,25 @@ export function ContactForm() {
     }
     if (values.website) return; // honeypot: bots fill hidden fields
 
+    const { name, email, phone, topic, message } = values;
+    if (contactViaEmail) {
+      const body = [
+        `${f.name}: ${name}`,
+        email ? `${f.email}: ${email}` : null,
+        phone ? `${f.phone}: ${phone}` : null,
+        `${f.topic}: ${topic}`,
+        "",
+        message,
+      ]
+        .filter((line) => line !== null)
+        .join("\n");
+      window.location.href = `${contact.email.href}?subject=${encodeURIComponent(`${f.mailSubject} — ${topic}`)}&body=${encodeURIComponent(body)}`;
+      setStatus("success");
+      return;
+    }
+
     setStatus("sending");
     try {
-      const { name, email, phone, topic, message } = values;
       await sendContactMessage({ name, email, phone, topic, message });
       setStatus("success");
     } catch {
@@ -73,9 +90,18 @@ export function ContactForm() {
         <span className="flex size-16 items-center justify-center rounded-full bg-blush text-rose-ink">
           <CircleCheck className="size-8" strokeWidth={1.25} aria-hidden />
         </span>
-        <h3 className="mt-6 text-4xl">{f.successTitle}</h3>
-        <p className="mt-3 max-w-sm">{f.successText}</p>
-        {isContactDemo && <p className="mt-4 max-w-sm text-xs text-muted">{f.demo}</p>}
+        <h3 className="mt-6 text-4xl">{contactViaEmail ? f.mailTitle : f.successTitle}</h3>
+        {contactViaEmail ? (
+          <p className="mt-3 max-w-sm">
+            {f.mailText.split("{email}")[0]}
+            <a href={contact.email.href} className="text-rose-ink underline underline-offset-2">
+              {contact.email.display}
+            </a>
+            {f.mailText.split("{email}")[1]}
+          </p>
+        ) : (
+          <p className="mt-3 max-w-sm">{f.successText}</p>
+        )}
         <Button
           variant="outline"
           className="mt-8"

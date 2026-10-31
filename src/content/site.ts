@@ -1,9 +1,7 @@
 /**
  * Business data shared by every language version.
  *
- * Values in [square brackets] are placeholders — replace them with real data
- * before going live. Everything else comes from materials provided by EPILAB
- * (price list, certificates, photos).
+ * Everything here comes from materials provided by EPILAB (contacts, price list, certificates, photos).
  */
 
 /** Sub-path the site is served from, e.g. "/epilab" on GitHub Pages. Empty on its own domain. */
@@ -24,30 +22,28 @@ export const site = {
   tagline: "Elektroepilacja Kielce",
   city: "Kielce",
   specialist: "Anastasiia Soloviova",
+  /** Shown to users as the person responsible for the studio and its data (footer, privacy policy). */
+  owner: "Anastasiia Soloviova",
 };
 
 export const contact = {
-  phone: { display: "+48 [numer telefonu]", href: "tel:+48000000000" },
-  email: { display: "[adres e-mail]", href: "mailto:[adres-e-mail]" },
+  phone: { display: "+48 573 179 301", href: "tel:+48573179301" },
+  email: { display: "nastiasolovyova2@gmail.com", href: "mailto:nastiasolovyova2@gmail.com" },
   instagram: {
     handle: "@epilab.as",
     href: "https://www.instagram.com/epilab.as/",
     // Opens the direct-message thread (app on phones, instagram.com/direct on desktop).
     dm: "https://ig.me/m/epilab.as",
   },
-  facebook: { handle: "[profil Facebook]", href: "https://www.facebook.com/" },
   address: {
-    street: "ul. [adres studia]",
-    city: "[kod pocztowy] Kielce",
+    street: "ul. Jurajska 2",
+    city: "25-640 Kielce",
   },
   // Any Google Maps "share → embed" URL works here. No API key required.
-  mapEmbedSrc: "https://www.google.com/maps?q=Kielce&z=13&output=embed",
-  mapLink: "https://www.google.com/maps/search/?api=1&query=Kielce",
-  hours: [
-    { days: "mon-fri", time: "[godziny]" },
-    { days: "sat", time: "[godziny]" },
-    { days: "sun", time: "closed" },
-  ],
+  mapEmbedSrc: "https://www.google.com/maps?q=ul.+Jurajska+2,+25-640+Kielce&z=16&output=embed",
+  mapLink: "https://www.google.com/maps/search/?api=1&query=ul.+Jurajska+2,+25-640+Kielce",
+  // "days" keys are labelled in the dictionaries (common.days); time "closed" shows the "closed" label.
+  hours: [{ days: "daily", time: "09:00–20:00" }] as Array<{ days: "daily" | "mon-fri" | "sat" | "sun"; time: string }>,
 } as const;
 
 export const images = {

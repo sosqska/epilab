@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, Clock, MapPin, Phone } from "lucide-react";
-import { absoluteUrl, contact, siteUrl, images } from "@/content/site";
+import { absoluteUrl, contact, images, site, siteUrl } from "@/content/site";
 import { languageAlternates } from "@/lib/metadata";
 import { priceList } from "@/content/pricing";
 import { getDictionary } from "@/i18n";
@@ -15,6 +15,7 @@ import { CheckList } from "@/components/ui/CheckList";
 import { ContentIcon, InstagramIcon } from "@/components/ui/icons";
 import { PriceCards } from "@/components/sections/PriceCards";
 import { ReviewCards } from "@/components/sections/ReviewCards";
+import { reviews } from "@/content/reviews";
 import { InstagramGrid } from "@/components/sections/InstagramGrid";
 import { OpeningHours } from "@/components/sections/OpeningHours";
 import { Ticker } from "@/components/sections/Ticker";
@@ -34,7 +35,17 @@ export function HomePage({ locale }: { locale: Locale }) {
     description: t.meta.description,
     url: siteUrl,
     image: `${new URL(siteUrl).origin}${images.specialist.src}`,
-    address: { "@type": "PostalAddress", addressLocality: "Kielce", addressCountry: "PL" },
+    telephone: contact.phone.href.replace("tel:", ""),
+    email: contact.email.display,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: contact.address.street,
+      postalCode: contact.address.city.split(" ")[0],
+      addressLocality: site.city,
+      addressCountry: "PL",
+    },
+    openingHours: "Mo-Su 09:00-20:00",
+    sameAs: [contact.instagram.href],
     priceRange: `${priceList[0].price}–${priceList[priceList.length - 1].price} PLN`,
   };
   const lp = (path: string) => localePath(locale, path);
@@ -182,16 +193,18 @@ export function HomePage({ locale }: { locale: Locale }) {
         </div>
       </Section>
 
-      {/* Reviews */}
-      <Section tone="blush" labelledBy="reviews-title" className="bg-gradient-to-b from-blush to-cream">
-        <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <SectionHeading id="reviews-title" eyebrow={h.reviews.eyebrow} title={h.reviews.title} intro={h.reviews.text} />
-          <ButtonLink href={lp("/opinie")} variant="outline" className="reveal self-start md:self-auto">
-            {t.common.allReviews}
-          </ButtonLink>
-        </div>
-        <ReviewCards locale={locale} limit={3} />
-      </Section>
+      {/* Reviews — shown once content/reviews.ts has real entries */}
+      {reviews.length > 0 && (
+        <Section tone="blush" labelledBy="reviews-title" className="bg-gradient-to-b from-blush to-cream">
+          <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <SectionHeading id="reviews-title" eyebrow={h.reviews.eyebrow} title={h.reviews.title} intro={h.reviews.text} />
+            <ButtonLink href={lp("/opinie")} variant="outline" className="reveal self-start md:self-auto">
+              {t.common.allReviews}
+            </ButtonLink>
+          </div>
+          <ReviewCards locale={locale} limit={3} />
+        </Section>
+      )}
 
       {/* Instagram */}
       <Section labelledBy="instagram-title">

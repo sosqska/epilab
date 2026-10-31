@@ -1,6 +1,5 @@
 /**
  * Polish copy for the whole site. Other languages must implement the same shape (see ../config.ts).
- * Text in [square brackets] is a placeholder waiting for real business information.
  */
 export const pl = {
   meta: {
@@ -76,13 +75,12 @@ export const pl = {
     writeDirect: "Napisz na Instagramie",
     call: "Zadzwoń",
     followInstagram: "Obserwuj na Instagramie",
-    days: { "mon-fri": "Poniedziałek – Piątek", sat: "Sobota", sun: "Niedziela" },
+    days: { daily: "Poniedziałek – Niedziela", "mon-fri": "Poniedziałek – Piątek", sat: "Sobota", sun: "Niedziela" },
     closed: "Nieczynne",
     from: "od",
     perMinute: "zł / min",
     free: "Bezpłatnie",
     electrodeFee: "za elektrodę",
-    placeholderNote: "Treść do uzupełnienia",
   },
 
   footer: {
@@ -95,6 +93,7 @@ export const pl = {
     rights: "Wszelkie prawa zastrzeżone.",
     privacy: "Polityka prywatności",
     madeBy: "Projekt i realizacja",
+    owner: "Studio prowadzi",
     signature: "Do zobaczenia\nw Kielcach",
   },
 
@@ -110,7 +109,7 @@ export const pl = {
       eyebrow: "Trwałe usuwanie owłosienia",
       titleA: "Elektroepilacja",
       titleB: "w Kielcach",
-      lead: "Bezpieczna, skuteczna i delikatna metoda, która usuwa niechciane włosy na zawsze — niezależnie od ich koloru i grubości. Indywidualne podejście, sterylne narzędzia i pełna dyskrecja.",
+      lead: "Bezpieczna, skuteczna i delikatna metoda trwałego usuwania owłosienia (zwykle seria zabiegów) — niezależnie od koloru i grubości włosów. Indywidualne podejście, sterylne narzędzia i pełna dyskrecja.",
       note: "Precyzja\nw każdym włosku",
       trial: "Zabieg próbny 20 min — bezpłatnie",
       trialNote: "płatna tylko elektroda",
@@ -127,7 +126,7 @@ export const pl = {
       eyebrow: "Czym jest elektroepilacja?",
       title: "Sprawdzona metoda trwałego usuwania owłosienia",
       p1: "Elektroepilacja (elektroliza) to precyzyjne działanie prądu na pojedynczy mieszek włosowy. Bardzo cienka, jednorazowa elektroda trafia do ujścia mieszka, a krótki impuls niszczy komórki odpowiedzialne za wzrost włosa.",
-      p2: "To jedyna metoda, którą amerykańska agencja FDA pozwala określać mianem trwałego usuwania owłosienia.",
+      p2: "Ponieważ włosy rosną cyklicznie, trwały efekt osiąga się zwykle w serii zabiegów.",
       points: [
         "Odpowiednia dla wszystkich partii twarzy i ciała",
         "Skuteczna także na jasnych i siwych włosach",
@@ -147,12 +146,12 @@ export const pl = {
       eyebrow: "Dlaczego EPILAB?",
       title: "Zaufanie budujemy szczegółami",
       items: [
-        { icon: "award", title: "Certyfikowana specjalistka", text: "Ukończony autorski kurs bezbolesnej elektroepilacji." },
+        { icon: "award", title: "Certyfikowana specjalistka", text: "Ukończony autorski kurs elektroepilacji z naciskiem na minimalny dyskomfort." },
         { icon: "shield", title: "Sterylne, jednorazowe igły", text: "Każda elektroda otwierana tuż przed zabiegiem." },
         { icon: "heart", title: "Indywidualny plan", text: "Czas i parametry dobrane do Twojej skóry i potrzeb." },
         { icon: "gift", title: "Bezpłatny zabieg próbny", text: "20 minut, by poznać metodę bez zobowiązań." },
       ],
-      note: "Maszynka działa do jutra.\nElektroepilacja — na zawsze",
+      note: "Maszynka działa do jutra.\nElektroepilacja — trwale",
       imageAlt: "Maszynka do golenia przekreślona, obok elektroda do elektroepilacji",
     },
     reviews: {
@@ -208,7 +207,7 @@ export const pl = {
         "Moja droga w branży beauty jest dość długa. Mam za sobą wiele ukończonych kursów, ale zawsze chciałam czegoś więcej — czegoś nowego i ciekawego dla mnie.",
         "Po 2 latach pracy jako specjalistka od depilacji laserowej zaczęłam samodzielnie zgłębiać temat elektroepilacji. Zainteresował mnie na tyle, że wiedziałam — chcę spróbować.",
         "Z czasem zapisałam się na szkolenie i pomyślnie je ukończyłam.",
-        "W ten sposób w moim życiu pojawił się nowy kierunek, który daje mi możliwość pomagania kobietom pozbyć się niechcianego owłosienia na stałe.",
+        "W ten sposób w moim życiu pojawił się nowy kierunek, który daje mi możliwość pomagania kobietom trwale pozbyć się niechcianego owłosienia.",
       ],
       imageAlt: "Anastasiia Soloviova podczas zabiegu w studiu EPILAB",
       signature: "Anastasiia",
@@ -218,13 +217,13 @@ export const pl = {
       title: "Wiedza potwierdzona certyfikatami",
       items: [
         {
-          title: "„Bezbolesna elektroepilacja”",
-          text: "Certyfikat ukończenia autorskiego kursu — program teoretyczny i praktyczny (2025).",
+          title: "Kurs elektroepilacji",
+          text: "Certyfikat ukończenia autorskiego kursu z naciskiem na minimalny dyskomfort — program teoretyczny i praktyczny (2025).",
         },
         { title: "Stylizacja rzęs", text: "Szkolenia Bossomi: 1:1 Basic oraz 2–5D Volume Basic." },
         { title: "Makijaż", text: "Szkolenie z zaawansowanych technik makijażu." },
       ],
-      imageAlt: "Certyfikaty ukończonych szkoleń, w tym kursu bezbolesnej elektroepilacji",
+      imageAlt: "Certyfikaty ukończonych szkoleń, w tym kursu elektroepilacji",
     },
     hygiene: {
       eyebrow: "Sprzęt i higiena",
@@ -263,14 +262,14 @@ export const pl = {
     hero: {
       eyebrow: "Usługi",
       title: "Elektroepilacja twarzy i ciała",
-      lead: "Usuwamy niechciane owłosienie z niemal każdej partii ciała — trwale, precyzyjnie i z dbałością o komfort skóry.",
+      lead: "Trwale usuwamy niechciane owłosienie z niemal każdej partii ciała (zwykle w serii zabiegów) — precyzyjnie i z dbałością o komfort skóry.",
       imageAlt: "Specjalistka trzyma elektrodę do elektroepilacji",
     },
     about: {
       eyebrow: "Zabieg",
       title: "Jak działa elektroepilacja?",
       p1: "Każdy włos rośnie z mieszka, w którym znajdują się komórki odpowiedzialne za jego wzrost. Podczas zabiegu do ujścia mieszka wprowadzana jest cienka, sterylna elektroda — bez przekłuwania skóry.",
-      p2: "Krótki impuls prądu niszczy komórki rozrodcze mieszka, a włos daje się usunąć pęsetą bez oporu. Zniszczony mieszek nie wytworzy już nowego włosa — dlatego efekt jest trwały.",
+      p2: "Krótki impuls prądu niszczy komórki rozrodcze mieszka, a włos daje się usunąć pęsetą bez oporu. Zniszczony mieszek nie wytworzy już nowego włosa — dlatego efekt jest trwały. Ponieważ włosy rosną cyklicznie, potrzebna jest zwykle seria zabiegów.",
     },
     steps: {
       eyebrow: "Przebieg wizyty",
@@ -291,7 +290,7 @@ export const pl = {
           title: "Twarz",
           items: [
             { title: "Brwi", text: "Modelowanie kształtu i linia między brwiami." },
-            { title: "Górna warga", text: "Delikatny „wąsik” usunięty na stałe." },
+            { title: "Górna warga", text: "Trwałe usuwanie delikatnego „wąsika”." },
             { title: "Podbródek", text: "Także pojedyncze, grube włosy hormonalne." },
             { title: "Policzki i baczki", text: "Wyrównanie linii owłosienia twarzy." },
             { title: "Szyja", text: "Przód i kark — precyzyjnie wyznaczona linia." },
@@ -329,7 +328,7 @@ export const pl = {
         "masz ciemną lub opaloną karnację,",
         "zmagasz się z nadmiernym owłosieniem hormonalnym (np. przy PCOS) — w porozumieniu z lekarzem,",
         "chcesz precyzyjnie wymodelować brwi lub linię bikini,",
-        "szukasz rozwiązania na zawsze, a nie na kilka dni.",
+        "szukasz trwałego usuwania owłosienia (zwykle seria zabiegów), a nie efektu na kilka dni.",
       ],
       note: "Studio przyjmuje wyłącznie kobiety. Przed pierwszą wizytą sprawdź listę przeciwwskazań.",
       faqLink: "Przeciwwskazania w FAQ",
@@ -371,7 +370,6 @@ export const pl = {
         "Ostateczny koszt zależy od czasu zabiegu, który ustalamy indywidualnie — w zależności od gęstości i grubości owłosienia oraz etapu terapii.",
         "Im dłuższy zabieg, tym niższy koszt minuty pracy.",
         "Ceny podane są w złotych polskich (PLN).",
-        "[Metody płatności — do uzupełnienia, np. gotówka, BLIK, karta].",
       ],
     },
   },
@@ -397,7 +395,7 @@ export const pl = {
       {
         id: "trwalosc", q: "Czy efekt jest trwały?",
         a: [
-          "Tak. Mieszek, którego komórki rozrodcze zostały zniszczone, nie wytworzy już nowego włosa. Elektroliza jest jedyną metodą, którą amerykańska agencja FDA pozwala określać mianem trwałego usuwania owłosienia.",
+          "Tak, to metoda trwałego usuwania owłosienia — zwykle potrzebna jest seria zabiegów. Mieszek, którego komórki rozrodcze zostały zniszczone, nie wytworzy już nowego włosa.",
           "Pamiętaj jednak, że zmiany hormonalne mogą z czasem pobudzić do wzrostu nowe, wcześniej uśpione mieszki.",
         ],
       },
@@ -405,7 +403,7 @@ export const pl = {
         id: "bol", q: "Czy zabieg boli?",
         a: [
           "Odczucia są indywidualne i zależą od obszaru oraz wrażliwości skóry. Większość osób opisuje je jako krótkie ciepło lub mrowienie.",
-          "Specjalistka ukończyła kurs bezbolesnej elektroepilacji — parametry dobierane są tak, by zabieg był jak najbardziej komfortowy.",
+          "Specjalistka ukończyła kurs elektroepilacji z naciskiem na minimalny dyskomfort — parametry dobierane są tak, by zabieg był jak najbardziej komfortowy.",
         ],
       },
       {
@@ -439,8 +437,8 @@ export const pl = {
       {
         id: "rezerwacja", q: "Jak zarezerwować i odwołać wizytę?",
         a: [
-          "Wizytę możesz zarezerwować online, wiadomością na Instagramie lub telefonicznie.",
-          "Jeśli nie możesz przyjść, poinformuj nas co najmniej [24 godziny] wcześniej. [Zasady odwoływania i przekładania wizyt — do uzupełnienia.]",
+          "Wybierz zabieg i termin w formularzu rezerwacji na stronie — rezerwacja trafi do nas jako wiadomość na Instagramie, a my potwierdzimy termin w odpowiedzi. Możesz też napisać do nas bezpośrednio na Instagramie lub zadzwonić.",
+          "Jeśli nie możesz przyjść, daj nam znać jak najwcześniej — wiadomością na Instagramie lub telefonicznie.",
         ],
       },
       {
@@ -458,14 +456,14 @@ export const pl = {
       title: "Słowa, które cieszą najbardziej",
       lead: "Każda opinia to dla nas powód do dumy i wskazówka, jak jeszcze lepiej dbać o komfort klientek.",
     },
-    placeholderText: "[Treść opinii klientki — do uzupełnienia prawdziwą opinią]",
-    placeholderName: "[Imię]",
-    placeholderBadge: "Miejsce na opinię",
     rating: "Ocena {n} na 5",
-    google: {
-      title: "Opinie Google",
-      text: "Wkrótce w tym miejscu pojawią się opinie z wizytówki Google studia EPILAB.",
-      todo: "[Miejsce na widżet opinii Google — wymaga podpięcia wizytówki]",
+    source: { instagram: "Instagram", google: "Google" },
+    viewSource: "Zobacz oryginał",
+    screenshot: "Zrzut ekranu",
+    empty: {
+      title: "Zajrzyj na nasz Instagram",
+      text: "Publikujemy tu wyłącznie prawdziwe opinie klientek — z odnośnikiem do źródła. Na Instagramie zobaczysz, jak pracujemy na co dzień.",
+      button: "Zobacz profil",
     },
     leave: {
       title: "Po wizycie w EPILAB?",
@@ -490,15 +488,6 @@ export const pl = {
       openMap: "Otwórz w Mapach Google",
       mapTitle: "Mapa dojazdu do studia EPILAB w Kielcach",
     },
-    directions: {
-      title: "Jak do nas trafić",
-      items: [
-        "[Wskazówki dojazdu — np. charakterystyczne punkty w okolicy]",
-        "[Parking — gdzie można zostawić samochód]",
-        "[Komunikacja miejska — najbliższe przystanki]",
-        "[Wejście — piętro, domofon, numer lokalu]",
-      ],
-    },
     form: {
       title: "Napisz do nas",
       text: "Pola oznaczone * są wymagane.",
@@ -516,7 +505,9 @@ export const pl = {
       successTitle: "Dziękujemy za wiadomość!",
       successText: "Odpowiemy najszybciej, jak to możliwe.",
       again: "Wyślij kolejną wiadomość",
-      demo: "Wersja demonstracyjna — wiadomość nie została nigdzie wysłana.",
+      mailSubject: "Wiadomość ze strony EPILAB",
+      mailTitle: "Prawie gotowe!",
+      mailText: "Otworzyliśmy Twoją pocztę z gotową wiadomością — wystarczy ją wysłać. Jeśli nic się nie otworzyło, napisz do nas na {email}.",
       errorTitle: "Nie udało się wysłać wiadomości",
       errorText: "Sprawdź połączenie z internetem i spróbuj ponownie lub napisz do nas na Instagramie.",
     },
@@ -610,7 +601,7 @@ export const pl = {
       client: "Dane kontaktowe",
       price: "Cena",
       edit: "Zmień",
-      policy: "Jeśli nie możesz przyjść, poinformuj nas co najmniej [24 godziny] wcześniej.",
+      policy: "Jeśli nie możesz przyjść, daj nam znać jak najwcześniej.",
       yourBooking: "Twoja rezerwacja",
       empty: "Wybierz zabieg, aby rozpocząć.",
     },
@@ -634,14 +625,81 @@ export const pl = {
 
   privacy: {
     title: "Polityka prywatności",
-    intro: "[Treść polityki prywatności — do uzupełnienia przed publikacją strony. Poniżej znajduje się szkielet najważniejszych sekcji.]",
+    // {owner}, {address}, {email}, {phone} and {instagram} are filled in from content/site.ts.
+    intro: "Poniżej wyjaśniamy, jakie dane osobowe przetwarzamy, gdy korzystasz z tej strony, rezerwujesz wizytę lub kontaktujesz się z nami.",
+    updated: "Ostatnia aktualizacja: 31 października 2026 r.",
     sections: [
-      { title: "Administrator danych", text: "[Imię i nazwisko lub nazwa firmy, adres, NIP, dane kontaktowe]." },
-      { title: "Zakres i cel przetwarzania", text: "[Jakie dane zbieramy przez formularz kontaktowy i rezerwację oraz w jakim celu]." },
-      { title: "Podstawa prawna", text: "[Podstawa prawna przetwarzania zgodnie z RODO]." },
-      { title: "Okres przechowywania", text: "[Jak długo przechowujemy dane]." },
-      { title: "Twoje prawa", text: "[Prawo dostępu, sprostowania, usunięcia, ograniczenia przetwarzania, sprzeciwu, skargi do PUODO]." },
-      { title: "Pliki cookies", text: "[Informacja o plikach cookies i narzędziach zewnętrznych, np. Mapy Google]." },
+      {
+        title: "Administrator danych",
+        body: [
+          "Administratorem Twoich danych osobowych jest {owner}, prowadząca studio EPILAB, {address}.",
+          "We wszystkich sprawach dotyczących danych osobowych możesz się z nami skontaktować e-mailowo ({email}) lub telefonicznie ({phone}).",
+        ],
+      },
+      {
+        title: "Rezerwacja wizyty przez Instagram",
+        body: [
+          "Strona nie ma własnej bazy danych i nie zapisuje rezerwacji na serwerze. Formularz rezerwacji przygotowuje jedynie treść wiadomości, którą sama wysyłasz do nas w wiadomości prywatnej na Instagramie ({instagram}). Rezerwacja dochodzi do skutku dopiero wtedy, gdy wyślesz tę wiadomość, a my potwierdzimy termin.",
+          "Dopóki wiadomość nie zostanie wysłana, wpisane dane są przechowywane wyłącznie w Twojej przeglądarce (pamięć sesji), aby nie zginęły przy przechodzeniu między krokami. Usuwamy je po przejściu do wysyłki wiadomości, a przeglądarka kasuje je po zamknięciu karty.",
+          "Wiadomości na Instagramie przetwarza również Meta Platforms Ireland Ltd. jako odrębny administrator, na zasadach opisanych w polityce prywatności Instagrama.",
+        ],
+      },
+      {
+        title: "Kontakt e-mailowy i telefoniczny",
+        body: [
+          "Formularz kontaktowy otwiera Twój program pocztowy z gotową wiadomością do nas — sama strona niczego nie wysyła. Możesz też napisać bezpośrednio na adres {email} lub zadzwonić. Pocztę e-mail obsługujemy w usłudze Gmail (Google).",
+        ],
+      },
+      {
+        title: "Jakie dane przetwarzamy i w jakim celu",
+        body: ["Przetwarzamy wyłącznie dane, które sama nam przekażesz:"],
+        list: [
+          "imię i nazwisko, numer telefonu i adres e-mail — aby umówić, potwierdzić lub przełożyć wizytę i odpowiedzieć na Twoje wiadomości,",
+          "wybrany zabieg, obszary i termin — aby przygotować się do wizyty,",
+          "informacje o zdrowiu (np. przeciwwskazania), jeśli zdecydujesz się je podać — aby bezpiecznie przeprowadzić zabieg,",
+          "treść korespondencji — aby prowadzić z Tobą kontakt.",
+        ],
+      },
+      {
+        title: "Podstawa prawna",
+        list: [
+          "art. 6 ust. 1 lit. b RODO — działania przed zawarciem umowy i wykonanie usługi (rezerwacja i zabieg),",
+          "art. 6 ust. 1 lit. f RODO — nasz prawnie uzasadniony interes: odpowiadanie na wiadomości oraz ewentualne dochodzenie roszczeń lub obrona przed nimi,",
+          "art. 9 ust. 2 lit. a RODO — Twoja wyraźna zgoda w przypadku informacji o zdrowiu,",
+          "art. 6 ust. 1 lit. c RODO — obowiązki prawne, np. podatkowe i rachunkowe.",
+        ],
+      },
+      {
+        title: "Odbiorcy danych",
+        body: [
+          "Nie sprzedajemy ani nie udostępniamy Twoich danych w celach marketingowych. Dane mogą trafiać do dostawców usług, z których korzystamy: Meta (Instagram), Google (Gmail, Mapy Google) oraz GitHub (hosting strony). Dostawcy ci mogą przekazywać dane poza Europejski Obszar Gospodarczy, w tym do USA — na podstawie decyzji Komisji Europejskiej (EU-U.S. Data Privacy Framework) lub standardowych klauzul umownych.",
+        ],
+      },
+      {
+        title: "Okres przechowywania",
+        body: [
+          "Korespondencję dotyczącą wizyt przechowujemy przez czas potrzebny do ich umówienia i realizacji, a następnie do upływu terminu przedawnienia ewentualnych roszczeń. Dane wymagane przepisami podatkowymi przechowujemy przez okres wskazany w tych przepisach. Informacje o zdrowiu usuwamy, gdy wycofasz zgodę lub gdy przestaną być potrzebne. Wiadomości, które nie doprowadziły do wizyty, usuwamy, gdy nie są już potrzebne.",
+        ],
+      },
+      {
+        title: "Twoje prawa",
+        body: [
+          "Masz prawo do dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania i przenoszenia, a także do wniesienia sprzeciwu. Zgodę możesz wycofać w dowolnym momencie — nie wpływa to na zgodność z prawem przetwarzania przed jej wycofaniem. Aby skorzystać z tych praw, napisz na {email}.",
+          "Masz też prawo wnieść skargę do Prezesa Urzędu Ochrony Danych Osobowych (ul. Stawki 2, 00-193 Warszawa, uodo.gov.pl).",
+          "Podanie danych jest dobrowolne, ale bez danych kontaktowych nie możemy umówić wizyty.",
+        ],
+      },
+      {
+        title: "Pliki cookies i narzędzia zewnętrzne",
+        body: [
+          "Strona nie używa własnych plików cookies ani narzędzi analitycznych. Na stronie Kontakt znajduje się mapa Google, która może zapisywać pliki cookies Google. Linki do Instagrama prowadzą do serwisu Meta, który stosuje własne zasady prywatności.",
+          "Strona jest hostowana w usłudze GitHub Pages (GitHub, Inc.), której serwery mogą rejestrować adres IP i dane techniczne przeglądarki w dziennikach serwera.",
+        ],
+      },
+      {
+        title: "Zmiany polityki",
+        body: ["Jeśli zmienimy sposób przetwarzania danych, zaktualizujemy tę stronę i datę ostatniej aktualizacji."],
+      },
     ],
   },
 
