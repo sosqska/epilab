@@ -4,7 +4,7 @@ import { getDictionary } from "@/i18n";
 import { type Locale } from "@/i18n/config";
 import { pageMetadata } from "@/lib/metadata";
 import { Eyebrow, Section, SectionHeading } from "@/components/ui/Section";
-import { Photo, PhotoPlaceholder } from "@/components/ui/Photo";
+import { Photo } from "@/components/ui/Photo";
 import { ScriptNote } from "@/components/ui/ScriptNote";
 import { Sprig } from "@/components/ui/Botanical";
 import { PageHero } from "@/components/sections/PageHero";
@@ -14,8 +14,7 @@ import { site } from "@/content/site";
 export const meta = (locale: Locale) => pageMetadata(locale, "about", "/o-nas/");
 
 export function AboutPage({ locale }: { locale: Locale }) {
-  const t = getDictionary(locale);
-  const a = t.about;
+  const a = getDictionary(locale).about;
   return (
     <>
       <PageHero
@@ -56,7 +55,9 @@ export function AboutPage({ locale }: { locale: Locale }) {
             <p className="reveal mt-2 text-sm uppercase tracking-[0.2em] text-muted">{a.specialist.role}</p>
             <div className="reveal mt-8 space-y-4 text-lg">
               <p>{a.specialist.p1}</p>
-              <p className="text-muted italic">{a.specialist.p2}</p>
+              {a.specialist.story.map((p) => (
+                <p key={p}>{p}</p>
+              ))}
             </div>
             <ScriptNote decorative className="reveal mt-8 -rotate-3 text-4xl md:text-5xl">
               {a.specialist.signature}
@@ -96,23 +97,8 @@ export function AboutPage({ locale }: { locale: Locale }) {
         </div>
       </Section>
 
-      {/* Studio */}
-      <Section tone="blush" labelledBy="studio-title">
-        <SectionHeading id="studio-title" eyebrow={a.studio.eyebrow} title={a.studio.title} intro={a.studio.text} />
-        <div className="mt-12 grid gap-4 md:grid-cols-[1.4fr_1fr] md:grid-rows-2">
-          {a.studio.placeholders.map((label, i) => (
-            <PhotoPlaceholder
-              key={label}
-              label={label}
-              note={t.common.photoSoon}
-              className={i === 0 ? "reveal min-h-72 md:row-span-2 md:min-h-[30rem]" : "reveal min-h-56"}
-            />
-          ))}
-        </div>
-      </Section>
-
       {/* Hygiene */}
-      <Section labelledBy="hygiene-title" className="overflow-hidden">
+      <Section tone="blush" labelledBy="hygiene-title" className="overflow-hidden">
         <div className="grid gap-14 lg:grid-cols-2 lg:gap-20">
           <div className="reveal relative grid grid-cols-2 gap-4 self-start">
             <Photo image="needlesWall" alt={a.hygiene.imageAlt} className="aspect-[3/4]" />

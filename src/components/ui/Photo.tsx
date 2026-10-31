@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { images, type ImageKey } from "@/content/site";
 import { cn } from "@/lib/cn";
-import { Sprig } from "./Botanical";
 
 /** Editorial photo frame. The wrapper class sets the aspect ratio; the image covers it. */
 export function Photo({
@@ -38,20 +37,3 @@ export function Photo({
   );
 }
 
-/** Clearly marked slot for photography that has not been supplied yet. */
-export function PhotoPlaceholder({ label, note, className }: { label: string; note: string; className?: string }) {
-  return (
-    <div
-      className={cn(
-        "relative flex flex-col items-center justify-center gap-3 overflow-hidden rounded-photo border border-dashed border-rose/60 bg-gradient-to-br from-blush to-cream p-6 text-center",
-        className,
-      )}
-      role="img"
-      aria-label={`${label} — ${note}`}
-    >
-      <Sprig className="w-9 text-rose" />
-      <p className="font-serif text-xl text-ink">{label}</p>
-      <p className="text-xs uppercase tracking-[0.2em] text-muted">{note}</p>
-    </div>
-  );
-}
