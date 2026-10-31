@@ -11,8 +11,8 @@ export function CtaBanner({ title, text }: { title?: string; text?: string }) {
   const t = getDictionary();
   return (
     <section aria-labelledby="cta-title" className="relative overflow-hidden bg-blush">
-      <Sprig className="pointer-events-none absolute -bottom-6 -left-6 w-32 rotate-[20deg] text-blush-deep md:w-44" />
-      <Sprig className="pointer-events-none absolute -top-8 -right-4 w-28 rotate-[200deg] text-blush-deep md:w-40" />
+      <Sprig className="pointer-events-none absolute -bottom-6 -left-6 w-32 rotate-[20deg] text-blush-deep md:w-44" sway />
+      <Sprig className="pointer-events-none absolute -top-8 -right-4 w-28 rotate-[200deg] text-blush-deep md:w-40" sway />
       <Container className="relative grid items-center gap-8 py-16 md:py-20 lg:grid-cols-[1fr_1.4fr_auto] lg:gap-12">
         <ScriptNote className="hidden -rotate-6 lg:block">{t.cta.note}</ScriptNote>
         <div className="reveal text-center lg:text-left">

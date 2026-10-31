@@ -7,7 +7,7 @@ const owner = "sosqska";
 const run = (cmd, opts = {}) => execSync(cmd, { stdio: "inherit", ...opts });
 
 const remote = execSync("git remote get-url origin").toString().trim();
-run("npx next build", {
+run("npm run build", {
   env: {
     ...process.env,
     NEXT_PUBLIC_BASE_PATH: `/${repo}`,

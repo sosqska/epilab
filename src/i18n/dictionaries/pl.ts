@@ -141,6 +141,7 @@ export const pl = {
       text: "Koszt zależy od długości zabiegu. Dzięki temu łatwo zaplanujesz budżet, a podczas jednej wizyty możemy pracować nad kilkoma obszarami.",
       trialLabel: "Zabieg próbny",
     },
+    ticker: ["Precyzja", "Bezpieczeństwo", "Dyskrecja", "Trwały efekt", "Sterylność", "Delikatność"],
     why: {
       eyebrow: "Dlaczego EPILAB?",
       title: "Zaufanie budujemy szczegółami",

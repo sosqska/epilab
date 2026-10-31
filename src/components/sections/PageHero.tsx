@@ -29,8 +29,8 @@ export function PageHero({
   if (!image) {
     return (
       <section className="relative overflow-hidden bg-gradient-to-b from-blush/70 to-ivory py-20 md:py-28">
-        <Sprig className="pointer-events-none absolute top-10 -left-4 w-28 -rotate-[24deg] text-blush-deep md:left-[8%] md:w-36" />
-        <Sprig className="pointer-events-none absolute -right-2 bottom-4 w-24 rotate-[160deg] text-blush-deep md:right-[9%] md:w-32" />
+        <Sprig className="pointer-events-none absolute top-10 -left-4 w-28 -rotate-[24deg] text-blush-deep md:left-[8%] md:w-36" sway />
+        <Sprig className="pointer-events-none absolute -right-2 bottom-4 w-24 rotate-[160deg] text-blush-deep md:right-[9%] md:w-32" sway />
         <Container className="relative text-center">
           <Eyebrow className="animate-rise mb-5">{eyebrow}</Eyebrow>
           <h1 className="animate-rise mx-auto max-w-3xl text-[clamp(2.3rem,10vw,3rem)] [animation-delay:80ms] md:text-6xl lg:text-7xl">{title}</h1>

@@ -15,6 +15,7 @@ import { PriceCards } from "@/components/sections/PriceCards";
 import { ReviewCards } from "@/components/sections/ReviewCards";
 import { InstagramGrid } from "@/components/sections/InstagramGrid";
 import { OpeningHours } from "@/components/sections/OpeningHours";
+import { Ticker } from "@/components/sections/Ticker";
 
 const t = getDictionary();
 const h = t.home;
@@ -40,12 +41,17 @@ export default function HomePage() {
         <Container className="relative grid min-h-[min(46rem,calc(100svh-5rem))] items-center gap-10 py-14 lg:grid-cols-2 lg:py-0">
           <div className="relative z-10 lg:py-24 lg:pr-6">
             <Eyebrow className="animate-rise mb-6">{h.hero.eyebrow}</Eyebrow>
-            <h1 className="animate-rise text-[clamp(2.4rem,11vw,3.4rem)] leading-[1.02] [animation-delay:80ms] sm:text-7xl lg:text-[5.4rem]">
-              {h.hero.titleA}
-              <span className="block font-normal text-rose-dark italic">{h.hero.titleB}</span>
+            {/* Each line rises out of its own mask; padding keeps descenders and the italic overhang inside it. */}
+            <h1 className="text-[clamp(2.4rem,11vw,3.4rem)] leading-[1.02] sm:text-7xl lg:text-[5.4rem]">
+              <span className="-mb-[0.12em] block overflow-hidden pr-[0.1em] pb-[0.12em]">
+                <span className="animate-line-up block [animation-delay:120ms]">{h.hero.titleA}</span>
+              </span>
+              <span className="-mb-[0.12em] block overflow-hidden pr-[0.15em] pb-[0.12em]">
+                <span className="animate-line-up block font-normal text-rose-dark italic [animation-delay:260ms]">{h.hero.titleB}</span>
+              </span>
             </h1>
-            <p className="animate-rise mt-7 max-w-lg text-lg [animation-delay:160ms]">{h.hero.lead}</p>
-            <div className="animate-rise mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 [animation-delay:240ms]">
+            <p className="animate-rise mt-7 max-w-lg text-lg [animation-delay:420ms]">{h.hero.lead}</p>
+            <div className="animate-rise mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 [animation-delay:540ms]">
               <ButtonLink href="/rezerwacja">{t.common.book}</ButtonLink>
               <ButtonLink href="/uslugi" variant="ghost">
                 {t.common.learnMore}
@@ -53,7 +59,7 @@ export default function HomePage() {
             </div>
             <Link
               href="/cennik"
-              className="animate-rise mt-10 inline-flex items-center gap-3 rounded-full border border-line bg-white/70 py-2 pr-5 pl-2 text-sm backdrop-blur transition-colors [animation-delay:320ms] hover:border-rose"
+              className="animate-rise mt-10 inline-flex items-center gap-3 rounded-full border border-line bg-white/70 py-2 pr-5 pl-2 text-sm backdrop-blur transition-colors [animation-delay:660ms] hover:border-rose"
             >
               <span className="rounded-full bg-blush px-3 py-1 text-xs font-medium tracking-wide text-rose-ink">20 min</span>
               <span>
@@ -63,7 +69,7 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="relative -mx-5 h-[30rem] sm:mx-0 sm:h-[36rem] lg:absolute lg:inset-y-12 lg:right-8 lg:left-[52%] lg:mx-0 lg:h-auto">
+          <div className="animate-rise relative -mx-5 h-[30rem] [animation-delay:200ms] sm:mx-0 sm:h-[36rem] lg:absolute lg:inset-y-12 lg:right-8 lg:left-[52%] lg:mx-0 lg:h-auto">
             <Photo
               image="specialist"
               alt={h.hero.imageAlt}
@@ -72,7 +78,6 @@ export default function HomePage() {
               position="50% 35%"
               className="h-full rounded-none sm:rounded-photo lg:rounded-[2rem]"
             />
-            
             <ScriptNote className="absolute right-6 bottom-8 -rotate-[8deg] text-white drop-shadow-[0_2px_8px_rgb(0_0_0/0.35)] md:right-10 md:bottom-12 md:text-4xl">
               {h.hero.note}
             </ScriptNote>
@@ -87,9 +92,9 @@ export default function HomePage() {
             {h.features.map((f, i) => (
               <li
                 key={f.title}
-                className={`reveal flex flex-col items-center px-4 text-center ${i === 4 ? "col-span-2 sm:col-span-1" : ""}`}
+                className={`reveal group flex flex-col items-center px-4 text-center ${i === 4 ? "col-span-2 sm:col-span-1" : ""}`}
               >
-                <span className="flex size-14 items-center justify-center rounded-full bg-blush text-rose-ink">
+                <span className="flex size-14 items-center justify-center rounded-full bg-blush text-rose-ink transition-transform duration-700 ease-[var(--ease-soft)] group-hover:-translate-y-1 group-hover:rotate-[8deg]">
                   <ContentIcon name={f.icon} className="size-6" />
                 </span>
                 <h2 className="mt-4 font-sans text-[0.95rem] font-medium tracking-wide text-ink">{f.title}</h2>
@@ -139,6 +144,8 @@ export default function HomePage() {
         </div>
         <PriceCards />
       </Section>
+
+      <Ticker words={h.ticker} />
 
       {/* Why EPILAB */}
       <Section labelledBy="why-title">

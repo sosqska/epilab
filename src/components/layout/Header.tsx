@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X } from "lucide-react";
 import { contact, routes } from "@/content/site";
 import { getDictionary } from "@/i18n";
 import { cn } from "@/lib/cn";
@@ -23,11 +22,20 @@ export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [showFab, setShowFab] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      setShowFab(y > window.innerHeight * 0.8);
+      // Reading-progress hairline, updated directly to avoid re-rendering on every scroll frame.
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -127,27 +135,63 @@ export function Header() {
               aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
               className="-mr-2 inline-flex size-11 items-center justify-center rounded-full text-ink transition-colors hover:bg-blush xl:hidden"
             >
-              {open ? <X className="size-6" strokeWidth={1.25} /> : <Menu className="size-6" strokeWidth={1.25} />}
+              {/* Three hairlines that fold into an × */}
+              <span className="relative block h-3.5 w-6" aria-hidden>
+                <span
+                  className={cn(
+                    "absolute left-0 h-px w-6 bg-current transition-all duration-500 ease-[var(--ease-soft)]",
+                    open ? "top-1/2 rotate-45" : "top-0",
+                  )}
+                />
+                <span
+                  className={cn(
+                    "absolute top-1/2 right-0 h-px bg-current transition-all duration-300",
+                    open ? "w-0 opacity-0" : "w-4 opacity-100",
+                  )}
+                />
+                <span
+                  className={cn(
+                    "absolute left-0 h-px w-6 bg-current transition-all duration-500 ease-[var(--ease-soft)]",
+                    open ? "top-1/2 -rotate-45" : "top-full",
+                  )}
+                />
+              </span>
             </button>
           </div>
         </div>
+        <span
+          ref={progressRef}
+          className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-gradient-to-r from-rose/60 to-rose-dark"
+          aria-hidden
+        />
       </header>
 
-      {/* Kept outside <header>: its backdrop-filter would become the containing block for this fixed panel. */}
+      {/* Kept outside <header>: its backdrop-filter would become the containing block for this fixed panel.
+          The panel stays mounted so it can animate; `inert` removes it from focus and AT while closed. */}
       <div
         id="mobile-menu"
         ref={panelRef}
-        hidden={!open}
-        className="fixed inset-x-0 top-20 bottom-0 z-40 overflow-y-auto bg-ivory xl:hidden"
+        inert={!open}
+        className={cn(
+          "fixed inset-x-0 top-20 bottom-0 z-40 overflow-y-auto bg-ivory transition-[clip-path,visibility] duration-700 ease-[var(--ease-soft)] xl:hidden",
+          open ? "visible [clip-path:inset(0_0_0_0)]" : "invisible [clip-path:inset(0_0_100%_0)]",
+        )}
       >
         <div className="relative mx-auto flex min-h-full max-w-[78rem] flex-col px-5 pt-6 pb-10 sm:px-8">
-          <Sprig className="pointer-events-none absolute right-6 bottom-28 w-24 rotate-12 text-blush-deep" />
+          <Sprig drawn={open} className="pointer-events-none absolute right-6 bottom-28 w-24 rotate-12 text-blush-deep" />
           <nav aria-label={t.nav.mainNav}>
             <ul className="divide-y divide-line/80">
               {routes.map(({ href, key }, i) => {
                 const active = isActive(pathname, href);
                 return (
-                  <li key={href} className="animate-rise" style={{ animationDelay: `${i * 40}ms` }}>
+                  <li
+                    key={href}
+                    className={cn(
+                      "transition-[opacity,transform] duration-700 ease-[var(--ease-soft)]",
+                      open ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
+                    )}
+                    style={{ transitionDelay: open ? `${120 + i * 55}ms` : "0ms" }}
+                  >
                     <Link
                       href={href}
                       onClick={close}
@@ -165,7 +209,12 @@ export function Header() {
               })}
             </ul>
           </nav>
-          <div className="mt-auto flex flex-col gap-4 pt-10">
+          <div
+            className={cn(
+              "mt-auto flex flex-col gap-4 pt-10 transition-[opacity,transform] duration-700 ease-[var(--ease-soft)]",
+              open ? "translate-y-0 opacity-100 delay-500" : "translate-y-4 opacity-0",
+            )}
+          >
             <ButtonLink href="/rezerwacja" className="w-full">
               {t.nav.book}
             </ButtonLink>
@@ -181,6 +230,21 @@ export function Header() {
           </div>
         </div>
       </div>
+
+      {/* Floating booking button on phones, slides in once the hero is scrolled past */}
+      {!isActive(pathname, "/rezerwacja") && (
+        <div
+          className={cn(
+            "fixed right-4 bottom-4 z-30 transition-all duration-700 ease-[var(--ease-soft)] md:hidden",
+            showFab && !open ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-24 opacity-0",
+          )}
+          inert={!showFab || open}
+        >
+          <ButtonLink href="/rezerwacja" className="shadow-lift">
+            {t.nav.book}
+          </ButtonLink>
+        </div>
+      )}
     </>
   );
 }

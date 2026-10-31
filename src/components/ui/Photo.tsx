@@ -20,14 +20,18 @@ export function Photo({
   position?: string;
 }) {
   return (
-    <div className={cn("relative overflow-hidden rounded-photo bg-blush", className)}>
+    // Above-the-fold (priority) photos settle in on load; the rest unmask as they scroll into view.
+    <div className={cn("relative overflow-hidden rounded-photo bg-blush", !priority && "unmask", className)}>
       <Image
         src={images[image].src}
         alt={alt}
         fill
         sizes={sizes}
         priority={priority}
-        className="object-cover transition-transform duration-[1.2s] ease-[var(--ease-soft)] hover:scale-[1.03]"
+        className={cn(
+          "object-cover transition-[scale] duration-[1.2s] ease-[var(--ease-soft)] hover:scale-[1.03]",
+          priority && "animate-settle",
+        )}
         style={{ objectPosition: position }}
       />
     </div>
