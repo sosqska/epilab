@@ -10,7 +10,7 @@
 export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 /** Public URL of the site root, including basePath, without a trailing slash. */
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(//$/, "");
+export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
 export function absoluteUrl(path: string) {
   return `${siteUrl}${path}`;
