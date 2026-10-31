@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EPILAB — сайт студии электроэпиляции (Kielce)
 
-## Getting Started
+Next.js 16 + TypeScript + Tailwind CSS 4 + Lucide. Полностью статический сайт (`output: "export"`):
+без сервера и без базы данных — `npm run build` собирает готовый HTML в папку `out/`,
+её можно залить на любой хостинг (GitHub Pages, Netlify, обычный FTP).
 
-First, run the development server:
+## Команды
+- `npm run dev` — локальная разработка (http://localhost:3000)
+- `npm run build` — сборка в `out/`
+- `npm run lint` — проверка ESLint
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Где править контент
+| Что | Файл |
+| --- | --- |
+| Телефон, адрес, Instagram, карта, часы работы | `src/content/site.ts` |
+| Цены | `src/content/pricing.ts` |
+| Отзывы (пустые записи = плейсхолдеры) | `src/content/reviews.ts` |
+| Все тексты сайта (PL) | `src/i18n/dictionaries/pl.ts` |
+| Расписание и шаг слотов для бронирования | `src/lib/availability.ts` |
+| Фото | `public/images/` + список в `src/content/site.ts` |
+| Цвета, шрифты, радиусы, тени | `src/app/globals.css` (`@theme`) |
+
+Всё, что в **[квадратных скобках]**, — плейсхолдеры: заменить реальными данными перед публикацией.
+
+## Формы (без бэкенда)
+По умолчанию контактная форма и бронирование работают в демо-режиме (валидация, состояния, экран
+подтверждения, но данные никуда не уходят — сайт честно об этом сообщает). Чтобы заявки реально
+отправлялись, задайте при сборке URL любого приёмника JSON (Formspree, вебхук Make/Zapier, API системы записи):
+
+```
+NEXT_PUBLIC_CONTACT_ENDPOINT=https://...
+NEXT_PUBLIC_BOOKING_ENDPOINT=https://...
+NEXT_PUBLIC_SITE_URL=https://ваш-домен.pl   # для canonical, sitemap, Open Graph
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Переводы (UK / EN)
+Тексты типизированы по `pl.ts`. Чтобы добавить язык: скопировать словарь в `uk.ts`/`en.ts`,
+зарегистрировать в `src/i18n/index.ts` и перенести страницы в `src/app/[locale]/`
+(подробности — в `src/i18n/config.ts`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Деплой на GitHub Pages
+`npm run deploy` — собирает сайт с `basePath=/epilab` и выкладывает `out/` в ветку `gh-pages`.
+Адрес: https://sosqska.github.io/epilab/

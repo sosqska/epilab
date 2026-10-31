@@ -1,26 +1,106 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ── Design tokens ─────────────────────────────────────────── */
+@theme {
+  --color-ivory: #fbf7f3;
+  --color-cream: #f6eee9;
+  --color-blush: #f1e3dd;
+  --color-blush-deep: #e8d2ca;
+  --color-rose: #c99d94;
+  --color-rose-dark: #9a665f;
+  --color-rose-ink: #84544e;
+  --color-ink: #3b2f2d;
+  --color-body: #5e4e4b;
+  --color-muted: #7a6965;
+  --color-line: #e8d9d2;
+  --color-gold: #b08a5a;
+
+  --font-serif: var(--font-cormorant), "Times New Roman", serif;
+  --font-sans: var(--font-jost), system-ui, sans-serif;
+  --font-script: var(--font-marck), cursive;
+
+  --radius-card: 1.25rem;
+  --radius-photo: 1.5rem;
+
+  --shadow-soft: 0 18px 40px -28px rgb(110 70 62 / 0.35);
+  --shadow-lift: 0 26px 50px -30px rgb(110 70 62 / 0.45);
+
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ── Base ──────────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-ivory);
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    color: var(--color-ink);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--color-blush-deep);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-rose-ink);
+    outline-offset: 3px;
+    border-radius: 6px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Motion (CSS only, progressive) ────────────────────────── */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility animate-rise {
+  animation: rise 0.9s var(--ease-soft) both;
+}
+
+/* Fades sections in as they scroll into view where supported; content stays visible elsewhere. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+  }
 }

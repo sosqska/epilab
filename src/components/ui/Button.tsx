@@ -1,0 +1,72 @@
+import Link from "next/link";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { ArrowRight, CalendarDays } from "lucide-react";
+import { cn } from "@/lib/cn";
+
+type Variant = "primary" | "outline" | "light" | "ghost";
+type Adornment = "calendar" | "arrow" | "none";
+
+const base =
+  "group inline-flex items-center justify-center gap-2.5 rounded-full text-[0.95rem] font-medium tracking-wide transition-all duration-300 ease-[var(--ease-soft)] disabled:pointer-events-none disabled:opacity-50";
+
+const variants: Record<Variant, string> = {
+  primary: "bg-rose-dark px-7 py-3.5 text-white shadow-soft hover:-translate-y-0.5 hover:bg-rose-ink hover:shadow-lift",
+  outline: "border border-rose-dark/45 px-7 py-3.5 text-rose-ink hover:border-rose-dark hover:bg-white/60",
+  light: "bg-white/85 px-7 py-3.5 text-rose-ink shadow-soft backdrop-blur hover:-translate-y-0.5 hover:bg-white",
+  ghost: "px-1 py-2 text-ink hover:text-rose-ink",
+};
+
+function Adorned({ icon, children }: { icon: Adornment; children: ReactNode }) {
+  return (
+    <>
+      {icon === "calendar" && <CalendarDays className="size-[1.1rem]" strokeWidth={1.5} aria-hidden />}
+      {children}
+      {icon === "arrow" && (
+        <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={1.5} aria-hidden />
+      )}
+    </>
+  );
+}
+
+export function ButtonLink({
+  href,
+  children,
+  variant = "primary",
+  icon = variant === "primary" ? "calendar" : "arrow",
+  className,
+  external,
+}: {
+  href: string;
+  children: ReactNode;
+  variant?: Variant;
+  icon?: Adornment;
+  className?: string;
+  external?: boolean;
+}) {
+  const cls = cn(base, variants[variant], className);
+  const content = <Adorned icon={icon}>{children}</Adorned>;
+  if (external)
+    return (
+      <a href={href} className={cls} target="_blank" rel="noopener noreferrer">
+        {content}
+      </a>
+    );
+  return (
+    <Link href={href} className={cls}>
+      {content}
+    </Link>
+  );
+}
+
+export function Button({
+  variant = "primary",
+  className,
+  children,
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }) {
+  return (
+    <button className={cn(base, variants[variant], className)} {...props}>
+      {children}
+    </button>
+  );
+}

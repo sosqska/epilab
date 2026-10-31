@@ -1,0 +1,57 @@
+/**
+ * Form delivery. The site is fully static, so there is no server or database here.
+ *
+ * - With NEXT_PUBLIC_CONTACT_ENDPOINT / NEXT_PUBLIC_BOOKING_ENDPOINT set (e.g. Formspree, a Make/Zapier webhook,
+ *   or a booking system's API), payloads are POSTed there as JSON.
+ * - Without them the forms run in demo mode: they validate, wait briefly and report success, and the UI says so.
+ */
+
+export type ContactPayload = {
+  name: string;
+  email: string;
+  phone: string;
+  topic: string;
+  message: string;
+};
+
+export type BookingPayload = {
+  service: string;
+  durationMinutes: number;
+  priceLabel: string;
+  areas: string[];
+  date: string; // YYYY-MM-DD
+  time: string; // HH:MM
+  name: string;
+  phone: string;
+  email: string;
+  notes: string;
+  firstVisit: boolean;
+};
+
+const contactEndpoint = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT;
+const bookingEndpoint = process.env.NEXT_PUBLIC_BOOKING_ENDPOINT;
+
+export const isContactDemo = !contactEndpoint;
+export const isBookingDemo = !bookingEndpoint;
+
+async function post(url: string, body: unknown) {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error(`Request failed with status ${res.status}`);
+}
+
+async function simulate() {
+  await new Promise((resolve) => setTimeout(resolve, 1100));
+  if (typeof navigator !== "undefined" && !navigator.onLine) throw new Error("offline");
+}
+
+export function sendContactMessage(payload: ContactPayload) {
+  return contactEndpoint ? post(contactEndpoint, payload) : simulate();
+}
+
+export function submitBooking(payload: BookingPayload) {
+  return bookingEndpoint ? post(bookingEndpoint, payload) : simulate();
+}
