@@ -5,7 +5,9 @@ import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } 
 import { ArrowLeft, ArrowRight, CalendarDays, Check, ChevronLeft, ChevronRight, CircleCheck, Clock, Copy, LoaderCircle } from "lucide-react";
 import { contact } from "@/content/site";
 import { formatDuration, formatPrice, priceList, trialSession } from "@/content/pricing";
-import { getDictionary } from "@/i18n";
+import type { Dictionary } from "@/i18n";
+import { useDictionary, useLocale } from "@/i18n/client";
+import { intlLocale, localePath, type Locale } from "@/i18n/config";
 import { bookingWindowDays, firstAvailableDate, fromISODate, getSlots, startOfToday, toISODate } from "@/lib/availability";
 import { bookingViaInstagram, submitBooking } from "@/lib/submit";
 import { copyText } from "@/lib/clipboard";
@@ -16,34 +18,51 @@ import { ScriptNote } from "@/components/ui/ScriptNote";
 import { InstagramIcon } from "@/components/ui/icons";
 import { CheckboxField, FormAlert, TextArea, TextField } from "@/components/forms/Field";
 
-const t = getDictionary();
-const b = t.booking;
-const v = t.validation;
-
 type Service = { key: string; minutes: number; title: string; price: string; note?: string };
 
-const services: Service[] = [
-  {
-    key: "trial",
-    minutes: trialSession.minutes,
-    title: b.service.trial,
-    price: t.common.free,
-    note: `${b.service.trialDesc} (${formatPrice(trialSession.electrodeFee)})`,
-  },
-  ...priceList.map(({ minutes, price }) => ({
-    key: `m${minutes}`,
-    minutes,
-    title: b.service.regular,
-    price: formatPrice(price),
-  })),
-];
+function buildServices(t: Dictionary, locale: Locale): Service[] {
+  const b = t.booking;
+  return [
+    {
+      key: "trial",
+      minutes: trialSession.minutes,
+      title: b.service.trial,
+      price: t.common.free,
+      note: `${b.service.trialDesc} (${formatPrice(trialSession.electrodeFee, locale)})`,
+    },
+    ...priceList.map(({ minutes, price }) => ({
+      key: `m${minutes}`,
+      minutes,
+      title: b.service.regular,
+      price: formatPrice(price, locale),
+    })),
+  ];
+}
+
+/** Language-dependent pieces shared by the booking flow and its calendar. */
+function useBookingI18n() {
+  const locale = useLocale();
+  const t = useDictionary();
+  return useMemo(
+    () => ({
+      locale,
+      t,
+      b: t.booking,
+      v: t.validation,
+      services: buildServices(t, locale),
+      dateFormatter: new Intl.DateTimeFormat(intlLocale[locale], { weekday: "long", day: "numeric", month: "long" }),
+      monthFormatter: new Intl.DateTimeFormat(intlLocale[locale], { month: "long", year: "numeric" }),
+    }),
+    [locale, t],
+  );
+}
 
 type Details = { name: string; phone: string; email: string; notes: string; firstVisit: boolean; consent: boolean };
 type DetailKey = keyof Details;
 
 const emptyDetails: Details = { name: "", phone: "", email: "", notes: "", firstVisit: false, consent: false };
 
-function validateDetails(d: Details): Errors<DetailKey> {
+function validateDetails(d: Details, v: Dictionary["validation"]): Errors<DetailKey> {
   const e: Errors<DetailKey> = {};
   if (d.name.trim().length < 2) e.name = v.name;
   if (!d.phone.trim()) e.phone = v.required;
@@ -90,10 +109,8 @@ function clearDraft() {
   } catch {}
 }
 
-const dateFormatter = new Intl.DateTimeFormat("pl-PL", { weekday: "long", day: "numeric", month: "long" });
-const monthFormatter = new Intl.DateTimeFormat("pl-PL", { month: "long", year: "numeric" });
-
 export function BookingFlow() {
+  const { locale, b, v, services, dateFormatter } = useBookingI18n();
   const [step, setStep] = useState(0);
   const [serviceKey, setServiceKey] = useState<string | null>(null);
   const [areas, setAreas] = useState<string[]>([]);
@@ -142,7 +159,8 @@ export function BookingFlow() {
     const key = preset === "trial" ? "trial" : preset ? `m${preset}` : null;
     if (key && services.some((s) => s.key === key)) setServiceKey(key);
     /* eslint-enable react-hooks/set-state-in-effect */
-  }, []);
+    // Runs once: `services` only changes with the language, which remounts this component.
+  }, [services]);
 
   useEffect(() => {
     if (status !== "success") writeDraft({ step, serviceKey, areas, date, time, details });
@@ -164,7 +182,7 @@ export function BookingFlow() {
   const setDetail = <K extends DetailKey>(key: K, value: Details[K]) => {
     const next = { ...details, [key]: value };
     setDetails(next);
-    if (Object.keys(errors).length) setErrors(validateDetails(next));
+    if (Object.keys(errors).length) setErrors(validateDetails(next, v));
   };
 
   function next() {
@@ -177,7 +195,7 @@ export function BookingFlow() {
     }
     if (step === 1 && (!date || !time)) return setStepError(!date ? b.date.pickDayFirst : b.date.timeTitle);
     if (step === 2) {
-      const found = validateDetails(details);
+      const found = validateDetails(details, v);
       setErrors(found);
       if (Object.keys(found).length) {
         requestAnimationFrame(() => focusFirstError(formRef.current));
@@ -197,7 +215,7 @@ export function BookingFlow() {
     setStatus("sending");
     try {
       await submitBooking({
-        service: service.key === "trial" ? b.service.trial : `${b.service.regular} ${formatDuration(service.minutes)}`,
+        service: service.key === "trial" ? b.service.trial : `${b.service.regular} ${formatDuration(service.minutes, locale)}`,
         durationMinutes: service.minutes,
         priceLabel: service.price,
         areas,
@@ -225,7 +243,7 @@ export function BookingFlow() {
     return [
       m.greeting,
       "",
-      `${m.service}: ${service.title} · ${formatDuration(service.minutes)} (${service.price})`,
+      `${m.service}: ${service.title} · ${formatDuration(service.minutes, locale)} (${service.price})`,
       areas.length > 0 ? `${m.areas}: ${areas.join(", ")}` : null,
       `${m.date}: ${capitalised}, ${time}`,
       `${m.name}: ${details.name.trim()}`,
@@ -238,7 +256,7 @@ export function BookingFlow() {
     ]
       .filter((line) => line !== null)
       .join("\n");
-  }, [service, date, time, dateLabel, areas, details]);
+  }, [service, date, time, dateLabel, areas, details, b, locale]);
 
   // Confirming shows the "almost done" instructions first; the chat only opens from there.
   function confirmViaInstagram() {
@@ -321,7 +339,7 @@ export function BookingFlow() {
             <Button variant="ghost" onClick={reset}>
               {b.success.another}
             </Button>
-            <ButtonLink href="/" variant="ghost" icon="arrow">
+            <ButtonLink href={localePath(locale, "/")} variant="ghost" icon="arrow">
               {b.success.home}
             </ButtonLink>
           </div>
@@ -342,7 +360,7 @@ export function BookingFlow() {
           </h2>
           <p className="mx-auto mt-4 max-w-md">{b.success.text}</p>
           <dl className="mx-auto mt-8 grid max-w-md gap-3 rounded-2xl bg-cream p-6 text-left text-sm">
-            <SummaryRow label={b.summary.service} value={service ? `${service.title} · ${formatDuration(service.minutes)}` : ""} />
+            <SummaryRow label={b.summary.service} value={service ? `${service.title} · ${formatDuration(service.minutes, locale)}` : ""} />
             <SummaryRow label={b.summary.date} value={`${dateLabel}, ${time}`} />
             <SummaryRow label={b.summary.price} value={service?.price ?? ""} />
           </dl>
@@ -350,7 +368,7 @@ export function BookingFlow() {
             <Button variant="outline" onClick={reset}>
               {b.success.another}
             </Button>
-            <ButtonLink href="/" variant="ghost" icon="arrow">
+            <ButtonLink href={localePath(locale, "/")} variant="ghost" icon="arrow">
               {b.success.home}
             </ButtonLink>
           </div>
@@ -424,7 +442,7 @@ export function BookingFlow() {
                           className="sr-only"
                         />
                         <span>
-                          <span className="block font-serif text-2xl text-ink">{formatDuration(s.minutes)}</span>
+                          <span className="block font-serif text-2xl text-ink">{formatDuration(s.minutes, locale)}</span>
                           <span className="block text-sm">{s.title}</span>
                           {s.note && <span className="mt-0.5 block text-xs text-muted">{s.note}</span>}
                         </span>
@@ -585,7 +603,7 @@ export function BookingFlow() {
                 </CheckboxField>
                 <CheckboxField id="b-consent" checked={details.consent} onChange={(e) => setDetail("consent", e.target.checked)} error={errors.consent}>
                   {b.details.consent}{" "}
-                  <Link href="/polityka-prywatnosci" target="_blank" rel="noopener" className="text-rose-ink underline underline-offset-2">
+                  <Link href={localePath(locale, "/polityka-prywatnosci")} target="_blank" rel="noopener" className="text-rose-ink underline underline-offset-2">
                     {b.details.consentLink}
                   </Link>
                   .<span className="text-rose-ink"> *</span>
@@ -608,7 +626,7 @@ export function BookingFlow() {
               )}
               <dl className="mt-8 divide-y divide-line rounded-2xl border border-line">
                 <ReviewRow label={b.summary.service} onEdit={() => setStep(0)} editLabel={b.summary.edit}>
-                  {service.title} · {formatDuration(service.minutes)}
+                  {service.title} · {formatDuration(service.minutes, locale)}
                   {areas.length > 0 && <span className="block text-sm text-muted">{areas.join(", ")}</span>}
                 </ReviewRow>
                 <ReviewRow label={b.summary.date} onEdit={() => setStep(1)} editLabel={b.summary.edit}>
@@ -687,7 +705,7 @@ export function BookingFlow() {
           </h2>
           {service ? (
             <dl className="mt-5 space-y-4 text-sm">
-              <SummaryRow label={b.summary.service} value={`${service.title} · ${formatDuration(service.minutes)}`} />
+              <SummaryRow label={b.summary.service} value={`${service.title} · ${formatDuration(service.minutes, locale)}`} />
               {areas.length > 0 && <SummaryRow label={b.summary.areas} value={areas.join(", ")} />}
               {date && <SummaryRow label={b.summary.date} value={`${dateLabel}${time ? `, ${time}` : ""}`} />}
               <div className="border-t border-white/70 pt-4">
@@ -752,6 +770,7 @@ function Calendar({
   minutes: number;
   onSelect: (iso: string) => void;
 }) {
+  const { b, dateFormatter, monthFormatter } = useBookingI18n();
   const today = startOfToday();
   const lastDay = new Date(today);
   lastDay.setDate(lastDay.getDate() + bookingWindowDays);

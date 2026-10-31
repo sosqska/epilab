@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getDictionary } from "@/i18n";
+import { localePath, type Locale } from "@/i18n/config";
 import { pageMetadata } from "@/lib/metadata";
 import { Container } from "@/components/ui/Container";
 import { Section, SectionHeading } from "@/components/ui/Section";
@@ -11,17 +12,17 @@ import { ScriptNote } from "@/components/ui/ScriptNote";
 import { PageHero } from "@/components/sections/PageHero";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 
-export const metadata = pageMetadata("services", "/uslugi/");
+export const meta = (locale: Locale) => pageMetadata(locale, "services", "/uslugi/");
 
-const t = getDictionary();
-const s = t.services;
-
-export default function ServicesPage() {
+export function ServicesPage({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
+  const s = t.services;
+  const lp = (path: string) => localePath(locale, path);
   return (
     <>
       <PageHero eyebrow={s.hero.eyebrow} title={s.hero.title} lead={s.hero.lead}>
         <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
-          <ButtonLink href="/rezerwacja">{t.common.book}</ButtonLink>
+          <ButtonLink href={lp("/rezerwacja")}>{t.common.book}</ButtonLink>
           <ButtonLink href="#obszary" variant="ghost">
             {s.areas.eyebrow}
           </ButtonLink>
@@ -120,7 +121,7 @@ export default function ServicesPage() {
             <div className="reveal mt-10 rounded-card border border-line bg-cream p-6">
               <p>{s.suitability.note}</p>
               <Link
-                href="/faq/#przeciwwskazania"
+                href={lp("/faq/#przeciwwskazania")}
                 className="group mt-3 inline-flex items-center gap-2 font-medium text-rose-ink underline-offset-4 hover:underline"
               >
                 {s.suitability.faqLink}
@@ -137,7 +138,7 @@ export default function ServicesPage() {
         </div>
       </Section>
 
-      <CtaBanner title={s.cta.title} text={s.cta.text} />
+      <CtaBanner locale={locale} title={s.cta.title} text={s.cta.text} />
     </>
   );
 }

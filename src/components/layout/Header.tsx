@@ -4,22 +4,26 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { contact, routes } from "@/content/site";
-import { getDictionary } from "@/i18n";
+import { useDictionary, useLocale } from "@/i18n/client";
+import { localePath, splitLocale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
 import { ButtonLink } from "@/components/ui/Button";
 import { InstagramIcon } from "@/components/ui/icons";
 import { Sprig } from "@/components/ui/Botanical";
 import { Logo } from "./Logo";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
-const t = getDictionary();
-
-function isActive(pathname: string, href: string) {
-  const path = pathname.replace(/\/$/, "") || "/";
+/** `routePath` is the locale-free router path, e.g. "/cennik/". */
+function isActive(routePath: string, href: string) {
+  const path = routePath.replace(/\/$/, "") || "/";
   return href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
 }
 
 export function Header() {
-  const pathname = usePathname();
+  const t = useDictionary();
+  const locale = useLocale();
+  const { path: pathname } = splitLocale(usePathname());
+  const lp = (p: string) => localePath(locale, p);
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showFab, setShowFab] = useState(false);
@@ -86,7 +90,7 @@ export function Header() {
         )}
       >
         <div className="mx-auto flex h-20 w-full max-w-[78rem] items-center justify-between gap-6 px-5 sm:px-8">
-          <Logo label={t.nav.logoLabel} onClick={close} />
+          <Logo label={t.nav.logoLabel} href={lp("/")} onClick={close} />
   
           <nav aria-label={t.nav.mainNav} className="hidden xl:block">
             <ul className="flex items-center gap-8">
@@ -95,7 +99,7 @@ export function Header() {
                 return (
                   <li key={href}>
                     <Link
-                      href={href}
+                      href={lp(href)}
                       aria-current={active ? "page" : undefined}
                       className={cn(
                         "relative py-2 text-[0.9rem] tracking-wide transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:bg-rose-dark after:transition-transform after:duration-500 hover:text-rose-ink",
@@ -111,9 +115,10 @@ export function Header() {
           </nav>
   
           <div className="flex items-center gap-3 sm:gap-5">
+            <LanguageSwitcher className="hidden sm:flex" />
             {/* Wrapper handles visibility: ButtonLink's own inline-flex would override `hidden`. */}
             <div className="hidden md:block">
-              <ButtonLink href="/rezerwacja" className="px-6 py-3">
+              <ButtonLink href={lp("/rezerwacja")} className="px-6 py-3">
                 {t.nav.book}
               </ButtonLink>
             </div>
@@ -179,6 +184,15 @@ export function Header() {
       >
         <div className="relative mx-auto flex min-h-full max-w-[78rem] flex-col px-5 pt-6 pb-10 sm:px-8">
           <Sprig drawn={open} className="pointer-events-none absolute right-6 bottom-28 w-24 rotate-12 text-blush-deep" />
+          <div
+            className={cn(
+              "mb-2 flex items-center justify-between transition-opacity duration-700",
+              open ? "opacity-100 delay-100" : "opacity-0",
+            )}
+          >
+            <span className="text-xs tracking-[0.2em] text-muted uppercase">{t.nav.language}</span>
+            <LanguageSwitcher size="lg" className="w-40" />
+          </div>
           <nav aria-label={t.nav.mainNav}>
             <ul className="divide-y divide-line/80">
               {routes.map(({ href, key }, i) => {
@@ -193,7 +207,7 @@ export function Header() {
                     style={{ transitionDelay: open ? `${120 + i * 55}ms` : "0ms" }}
                   >
                     <Link
-                      href={href}
+                      href={lp(href)}
                       onClick={close}
                       aria-current={active ? "page" : undefined}
                       className={cn(
@@ -215,7 +229,7 @@ export function Header() {
               open ? "translate-y-0 opacity-100 delay-500" : "translate-y-4 opacity-0",
             )}
           >
-            <ButtonLink href="/rezerwacja" className="w-full">
+            <ButtonLink href={lp("/rezerwacja")} className="w-full">
               {t.nav.book}
             </ButtonLink>
             <a
@@ -240,7 +254,7 @@ export function Header() {
           )}
           inert={!showFab || open}
         >
-          <ButtonLink href="/rezerwacja" className="shadow-lift">
+          <ButtonLink href={lp("/rezerwacja")} className="shadow-lift">
             {t.nav.book}
           </ButtonLink>
         </div>

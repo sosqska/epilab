@@ -3,22 +3,20 @@
 import Link from "next/link";
 import { useRef, useState, type FormEvent } from "react";
 import { CircleCheck, LoaderCircle } from "lucide-react";
-import { getDictionary } from "@/i18n";
+import type { Dictionary } from "@/i18n";
+import { useDictionary, useLocale } from "@/i18n/client";
+import { localePath } from "@/i18n/config";
 import { isContactDemo, sendContactMessage, type ContactPayload } from "@/lib/submit";
 import { focusFirstError, isEmail, isPhone, type Errors } from "@/lib/validation";
 import { Button } from "@/components/ui/Button";
 import { CheckboxField, FormAlert, SelectField, TextArea, TextField } from "./Field";
 
-const t = getDictionary();
-const f = t.contact.form;
-const v = t.validation;
-
 type Values = ContactPayload & { consent: boolean; website: string };
 type Key = keyof Values;
 
-const initial: Values = { name: "", email: "", phone: "", topic: f.topics[0], message: "", consent: false, website: "" };
+const emptyValues = (topic: string): Values => ({ name: "", email: "", phone: "", topic, message: "", consent: false, website: "" });
 
-function validate(values: Values): Errors<Key> {
+function validate(values: Values, v: Dictionary["validation"]): Errors<Key> {
   const errors: Errors<Key> = {};
   if (values.name.trim().length < 2) errors.name = v.name;
   if (!values.email.trim() && !values.phone.trim()) errors.email = v.emailOrPhone;
@@ -30,6 +28,11 @@ function validate(values: Values): Errors<Key> {
 }
 
 export function ContactForm() {
+  const locale = useLocale();
+  const t = useDictionary();
+  const f = t.contact.form;
+  const v = t.validation;
+  const initial = emptyValues(f.topics[0]);
   const formRef = useRef<HTMLFormElement>(null);
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState<Errors<Key>>({});
@@ -40,13 +43,13 @@ export function ContactForm() {
     const next = { ...values, [key]: value };
     setValues(next);
     // After the first submit attempt, errors update live as the user fixes them.
-    if (submitted) setErrors(validate(next));
+    if (submitted) setErrors(validate(next, v));
   };
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     setSubmitted(true);
-    const found = validate(values);
+    const found = validate(values, v);
     setErrors(found);
     if (Object.keys(found).length) {
       requestAnimationFrame(() => focusFirstError(formRef.current));
@@ -153,7 +156,7 @@ export function ContactForm() {
 
       <CheckboxField id="consent" checked={values.consent} onChange={(e) => set("consent", e.target.checked)} error={errors.consent}>
         {f.consent}{" "}
-        <Link href="/polityka-prywatnosci" target="_blank" rel="noopener" className="text-rose-ink underline underline-offset-2">
+        <Link href={localePath(locale, "/polityka-prywatnosci")} target="_blank" rel="noopener" className="text-rose-ink underline underline-offset-2">
           {f.consentLink}
         </Link>
         .<span className="text-rose-ink"> *</span>

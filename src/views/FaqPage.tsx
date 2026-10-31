@@ -1,6 +1,7 @@
 import { Phone } from "lucide-react";
 import { contact } from "@/content/site";
 import { getDictionary } from "@/i18n";
+import { localePath, type Locale } from "@/i18n/config";
 import { pageMetadata } from "@/lib/metadata";
 import { Section } from "@/components/ui/Section";
 import { ButtonLink } from "@/components/ui/Button";
@@ -10,22 +11,22 @@ import { PageHero } from "@/components/sections/PageHero";
 import { FaqAccordion } from "@/components/sections/FaqAccordion";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 
-export const metadata = pageMetadata("faq", "/faq/");
+export const meta = (locale: Locale) => pageMetadata(locale, "faq", "/faq/");
 
-const t = getDictionary();
-const f = t.faq;
+export function FaqPage({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
+  const f = t.faq;
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: f.items.map((item) => ({
-    "@type": "Question",
-    name: item.q,
-    acceptedAnswer: { "@type": "Answer", text: item.a.join(" ") },
-  })),
-};
-
-export default function FaqPage() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: f.items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a.join(" ") },
+    })),
+  };
+  const lp = (path: string) => localePath(locale, path);
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
@@ -67,7 +68,7 @@ export default function FaqPage() {
                   <Phone className="size-4" strokeWidth={1.5} aria-hidden /> {contact.phone.display}
                 </a>
               </div>
-              <ButtonLink href="/kontakt" variant="outline" className="relative mt-6 bg-ivory/60">
+              <ButtonLink href={lp("/kontakt")} variant="outline" className="relative mt-6 bg-ivory/60">
                 {t.common.contactUs}
               </ButtonLink>
             </div>
@@ -77,7 +78,7 @@ export default function FaqPage() {
         </div>
       </Section>
 
-      <CtaBanner />
+      <CtaBanner locale={locale} />
     </>
   );
 }

@@ -4,16 +4,28 @@ import { images } from "@/content/site";
 import { cn } from "@/lib/cn";
 
 /** Header: gold EL monogram + wordmark. Footer (`full`): the complete stacked logo. */
-export function Logo({ label, className, onClick, full }: { label: string; className?: string; onClick?: () => void; full?: boolean }) {
+export function Logo({
+  label,
+  href = "/",
+  className,
+  onClick,
+  full,
+}: {
+  label: string;
+  href?: string;
+  className?: string;
+  onClick?: () => void;
+  full?: boolean;
+}) {
   if (full)
     return (
-      <Link href="/" aria-label={label} onClick={onClick} className={cn("block w-24", className)}>
+      <Link href={href} aria-label={label} onClick={onClick} className={cn("block w-24", className)}>
         <Image src={images.logoFull.src} alt="" width={images.logoFull.width} height={images.logoFull.height} className="h-auto w-full" />
       </Link>
     );
 
   return (
-    <Link href="/" aria-label={label} onClick={onClick} className={cn("group flex items-center gap-3", className)}>
+    <Link href={href} aria-label={label} onClick={onClick} className={cn("group flex items-center gap-3", className)}>
       <Image
         src={images.logoMark.src}
         alt=""

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { images } from "@/content/site";
 import { getDictionary } from "@/i18n";
+import { type Locale } from "@/i18n/config";
 import { pageMetadata } from "@/lib/metadata";
 import { Eyebrow, Section, SectionHeading } from "@/components/ui/Section";
 import { Photo, PhotoPlaceholder } from "@/components/ui/Photo";
@@ -10,12 +11,11 @@ import { PageHero } from "@/components/sections/PageHero";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 import { site } from "@/content/site";
 
-export const metadata = pageMetadata("about", "/o-nas/");
+export const meta = (locale: Locale) => pageMetadata(locale, "about", "/o-nas/");
 
-const t = getDictionary();
-const a = t.about;
-
-export default function AboutPage() {
+export function AboutPage({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
+  const a = t.about;
   return (
     <>
       <PageHero
@@ -150,7 +150,7 @@ export default function AboutPage() {
         </ol>
       </Section>
 
-      <CtaBanner />
+      <CtaBanner locale={locale} />
     </>
   );
 }

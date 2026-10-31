@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { ArrowRight, Clock, MapPin, Phone } from "lucide-react";
-import { contact, siteUrl, images } from "@/content/site";
+import { absoluteUrl, contact, siteUrl, images } from "@/content/site";
+import { languageAlternates } from "@/lib/metadata";
 import { priceList } from "@/content/pricing";
 import { getDictionary } from "@/i18n";
+import { localePath, type Locale } from "@/i18n/config";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow, Section, SectionHeading } from "@/components/ui/Section";
 import { ButtonLink } from "@/components/ui/Button";
@@ -17,21 +19,25 @@ import { InstagramGrid } from "@/components/sections/InstagramGrid";
 import { OpeningHours } from "@/components/sections/OpeningHours";
 import { Ticker } from "@/components/sections/Ticker";
 
-const t = getDictionary();
-const h = t.home;
+export const meta = (locale: Locale) => ({
+  alternates: { canonical: absoluteUrl(localePath(locale, "/")), languages: languageAlternates("/") },
+});
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "BeautySalon",
-  name: "EPILAB — Elektroepilacja Kielce",
-  description: t.meta.description,
-  url: siteUrl,
-  image: `${new URL(siteUrl).origin}${images.specialist.src}`,
-  address: { "@type": "PostalAddress", addressLocality: "Kielce", addressCountry: "PL" },
-  priceRange: `${priceList[0].price}–${priceList[priceList.length - 1].price} PLN`,
-};
+export function HomePage({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
+  const h = t.home;
 
-export default function HomePage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BeautySalon",
+    name: "EPILAB — Elektroepilacja Kielce",
+    description: t.meta.description,
+    url: siteUrl,
+    image: `${new URL(siteUrl).origin}${images.specialist.src}`,
+    address: { "@type": "PostalAddress", addressLocality: "Kielce", addressCountry: "PL" },
+    priceRange: `${priceList[0].price}–${priceList[priceList.length - 1].price} PLN`,
+  };
+  const lp = (path: string) => localePath(locale, path);
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -52,13 +58,13 @@ export default function HomePage() {
             </h1>
             <p className="animate-rise mt-7 max-w-lg text-lg [animation-delay:420ms]">{h.hero.lead}</p>
             <div className="animate-rise mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 [animation-delay:540ms]">
-              <ButtonLink href="/rezerwacja">{t.common.book}</ButtonLink>
-              <ButtonLink href="/uslugi" variant="ghost">
+              <ButtonLink href={lp("/rezerwacja")}>{t.common.book}</ButtonLink>
+              <ButtonLink href={lp("/uslugi")} variant="ghost">
                 {t.common.learnMore}
               </ButtonLink>
             </div>
             <Link
-              href="/cennik"
+              href={lp("/cennik")}
               className="animate-rise mt-10 inline-flex items-center gap-3 rounded-full border border-line bg-white/70 py-2 pr-5 pl-2 text-sm backdrop-blur transition-colors [animation-delay:660ms] hover:border-rose"
             >
               <span className="rounded-full bg-blush px-3 py-1 text-xs font-medium tracking-wide text-rose-ink">20 min</span>
@@ -123,7 +129,7 @@ export default function HomePage() {
             </div>
             <CheckList items={h.intro.points} className="reveal mt-8" />
             <div className="reveal mt-10">
-              <ButtonLink href="/uslugi" variant="outline">
+              <ButtonLink href={lp("/uslugi")} variant="outline">
                 {t.common.allServices}
               </ButtonLink>
             </div>
@@ -137,12 +143,12 @@ export default function HomePage() {
           <SectionHeading id="pricing-title" eyebrow={h.pricing.eyebrow} title={h.pricing.title} />
           <div className="reveal space-y-6 lg:pb-2">
             <p className="text-lg">{h.pricing.text}</p>
-            <ButtonLink href="/cennik" variant="outline">
+            <ButtonLink href={lp("/cennik")} variant="outline">
               {t.common.fullPricing}
             </ButtonLink>
           </div>
         </div>
-        <PriceCards />
+        <PriceCards locale={locale} />
       </Section>
 
       <Ticker words={h.ticker} />
@@ -180,11 +186,11 @@ export default function HomePage() {
       <Section tone="blush" labelledBy="reviews-title" className="bg-gradient-to-b from-blush to-cream">
         <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <SectionHeading id="reviews-title" eyebrow={h.reviews.eyebrow} title={h.reviews.title} intro={h.reviews.text} />
-          <ButtonLink href="/opinie" variant="outline" className="reveal self-start md:self-auto">
+          <ButtonLink href={lp("/opinie")} variant="outline" className="reveal self-start md:self-auto">
             {t.common.allReviews}
           </ButtonLink>
         </div>
-        <ReviewCards limit={3} />
+        <ReviewCards locale={locale} limit={3} />
       </Section>
 
       {/* Instagram */}
@@ -197,7 +203,7 @@ export default function HomePage() {
           intro={h.instagram.text}
         />
         <div className="mt-12">
-          <InstagramGrid />
+          <InstagramGrid locale={locale} />
         </div>
         <div className="mt-10 text-center">
           <a
@@ -225,7 +231,7 @@ export default function HomePage() {
               </h2>
               <p className="mt-4">{h.contact.text}</p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <ButtonLink href="/rezerwacja">{h.contact.bookOnline}</ButtonLink>
+                <ButtonLink href={lp("/rezerwacja")}>{h.contact.bookOnline}</ButtonLink>
                 <ButtonLink href={contact.instagram.href} external variant="outline" icon="none">
                   <InstagramIcon className="size-[1.1rem]" />
                   {t.common.writeDirect}
@@ -238,7 +244,7 @@ export default function HomePage() {
                 <div>
                   <p className="text-ink">{contact.address.street}</p>
                   <p className="text-sm">{contact.address.city}</p>
-                  <Link href="/kontakt" className="mt-1 inline-block text-sm text-rose-ink underline-offset-4 hover:underline">
+                  <Link href={lp("/kontakt")} className="mt-1 inline-block text-sm text-rose-ink underline-offset-4 hover:underline">
                     {t.contact.details.openMap}
                   </Link>
                 </div>
@@ -261,7 +267,7 @@ export default function HomePage() {
                 <Clock className="size-5 text-rose-dark" strokeWidth={1.25} aria-hidden />
                 {t.footer.hoursHeading}
               </p>
-              <OpeningHours />
+              <OpeningHours locale={locale} />
               <p className="mt-4 text-sm text-muted">{t.footer.hoursNote}</p>
             </div>
           </div>

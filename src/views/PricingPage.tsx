@@ -1,6 +1,7 @@
 import { Info } from "lucide-react";
 import { formatDuration, formatPrice, priceList, pricePerMinute, trialSession } from "@/content/pricing";
 import { getDictionary } from "@/i18n";
+import { localePath, type Locale } from "@/i18n/config";
 import { pageMetadata } from "@/lib/metadata";
 import { Eyebrow, Section } from "@/components/ui/Section";
 import { ButtonLink } from "@/components/ui/Button";
@@ -8,24 +9,24 @@ import { Sprig } from "@/components/ui/Botanical";
 import { PageHero } from "@/components/sections/PageHero";
 import { CtaBanner } from "@/components/sections/CtaBanner";
 
-export const metadata = pageMetadata("pricing", "/cennik/");
+export const meta = (locale: Locale) => pageMetadata(locale, "pricing", "/cennik/");
 
-const t = getDictionary();
-const p = t.pricing;
+export function PricingPage({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
+  const p = t.pricing;
 
-const offers = {
-  "@context": "https://schema.org",
-  "@type": "OfferCatalog",
-  name: "Cennik elektroepilacji — EPILAB Kielce",
-  itemListElement: priceList.map(({ minutes, price }) => ({
-    "@type": "Offer",
-    name: `Elektroepilacja ${formatDuration(minutes)}`,
-    price,
-    priceCurrency: "PLN",
-  })),
-};
-
-export default function PricingPage() {
+  const offers = {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    name: "Cennik elektroepilacji — EPILAB Kielce",
+    itemListElement: priceList.map(({ minutes, price }) => ({
+      "@type": "Offer",
+      name: `Elektroepilacja ${formatDuration(minutes, locale)}`,
+      price,
+      priceCurrency: "PLN",
+    })),
+  };
+  const lp = (path: string) => localePath(locale, path);
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(offers) }} />
@@ -48,11 +49,11 @@ export default function PricingPage() {
                 <div className="pb-1">
                   <p className="font-serif text-3xl">{t.common.free}</p>
                   <p className="text-sm text-white/80">
-                    {p.trial.fee} — {formatPrice(trialSession.electrodeFee)}
+                    {p.trial.fee} — {formatPrice(trialSession.electrodeFee, locale)}
                   </p>
                 </div>
               </div>
-              <ButtonLink href="/rezerwacja/?usluga=trial" variant="light" className="mt-9">
+              <ButtonLink href={lp("/rezerwacja/?usluga=trial")} variant="light" className="mt-9">
                 {t.common.book}
               </ButtonLink>
             </article>
@@ -79,30 +80,30 @@ export default function PricingPage() {
             <Sprig className="pointer-events-none absolute top-8 right-6 w-10 scale-x-[-1] rotate-12 text-rose/70 sm:right-10" />
             <Eyebrow className="text-center">{p.table.eyebrow}</Eyebrow>
             <h2 id="price-title" className="mt-2 text-center font-script text-6xl font-normal text-rose-ink md:text-7xl">
-              Cennik
+              {p.table.scriptTitle}
             </h2>
             <ul className="mt-10" aria-label={p.table.title}>
               {priceList.map(({ minutes, price }) => (
                 <li key={minutes} className="group flex items-center gap-4 py-3">
-                  <span className="font-serif text-2xl whitespace-nowrap text-ink md:text-[1.7rem]">{formatDuration(minutes)}</span>
+                  <span className="font-serif text-2xl whitespace-nowrap text-ink md:text-[1.7rem]">{formatDuration(minutes, locale)}</span>
                   <span className="h-px flex-1 bg-line transition-colors duration-500 group-hover:bg-rose" aria-hidden />
                   <span className="text-right whitespace-nowrap">
-                    <span className="font-serif text-2xl text-rose-ink md:text-[1.7rem]">{formatPrice(price)}</span>
+                    <span className="font-serif text-2xl text-rose-ink md:text-[1.7rem]">{formatPrice(price, locale)}</span>
                     <span className="block text-[0.7rem] tracking-wide text-muted">
-                      ≈ {pricePerMinute(minutes, price)} {t.common.perMinute}
+                      ≈ {pricePerMinute(minutes, price, locale)} {t.common.perMinute}
                     </span>
                   </span>
                 </li>
               ))}
             </ul>
             <div className="mt-10 text-center">
-              <ButtonLink href="/rezerwacja">{t.common.bookVisit}</ButtonLink>
+              <ButtonLink href={lp("/rezerwacja")}>{t.common.bookVisit}</ButtonLink>
             </div>
           </div>
         </div>
       </Section>
 
-      <CtaBanner />
+      <CtaBanner locale={locale} />
     </>
   );
 }

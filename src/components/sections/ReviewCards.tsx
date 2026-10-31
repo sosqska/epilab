@@ -1,11 +1,12 @@
 import { Quote, Star } from "lucide-react";
 import { reviews } from "@/content/reviews";
 import { getDictionary } from "@/i18n";
+import type { Locale } from "@/i18n/config";
 import { cn } from "@/lib/cn";
 
-function Stars({ rating }: { rating: number }) {
+function Stars({ rating, label }: { rating: number; label: string }) {
   return (
-    <div className="flex gap-0.5 text-rose-dark" role="img" aria-label={`Ocena ${rating} na 5`}>
+    <div className="flex gap-0.5 text-rose-dark" role="img" aria-label={label.replace("{n}", String(rating))}>
       {Array.from({ length: 5 }, (_, i) => (
         <Star key={i} className={cn("size-3.5", i < rating && "fill-current")} strokeWidth={1.25} aria-hidden />
       ))}
@@ -17,8 +18,8 @@ function Stars({ rating }: { rating: number }) {
  * Testimonials from content/reviews.ts. Entries without real text render as clearly marked placeholders,
  * and stars are only shown for verified reviews.
  */
-export function ReviewCards({ limit, className }: { limit?: number; className?: string }) {
-  const t = getDictionary();
+export function ReviewCards({ locale, limit, className }: { locale: Locale; limit?: number; className?: string }) {
+  const t = getDictionary(locale);
   const items = limit ? reviews.slice(0, limit) : reviews;
 
   return (
@@ -44,7 +45,7 @@ export function ReviewCards({ limit, className }: { limit?: number; className?: 
             </blockquote>
             <div className="mt-6 flex items-center justify-between gap-4 border-t border-line pt-4">
               <p className="text-sm text-ink">{review.author ?? t.reviews.placeholderName}</p>
-              {review.verified && review.rating && <Stars rating={review.rating} />}
+              {review.verified && review.rating && <Stars rating={review.rating} label={t.reviews.rating} />}
             </div>
           </li>
         );

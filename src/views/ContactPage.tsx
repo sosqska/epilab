@@ -2,6 +2,7 @@ import { Clock, Mail, MapPin, Navigation, Phone } from "lucide-react";
 import type { ReactNode } from "react";
 import { contact } from "@/content/site";
 import { getDictionary } from "@/i18n";
+import { localePath, type Locale } from "@/i18n/config";
 import { pageMetadata } from "@/lib/metadata";
 import { Section } from "@/components/ui/Section";
 import { ButtonLink } from "@/components/ui/Button";
@@ -10,10 +11,7 @@ import { PageHero } from "@/components/sections/PageHero";
 import { OpeningHours } from "@/components/sections/OpeningHours";
 import { ContactForm } from "@/components/forms/ContactForm";
 
-export const metadata = pageMetadata("contact", "/kontakt/");
-
-const t = getDictionary();
-const c = t.contact;
+export const meta = (locale: Locale) => pageMetadata(locale, "contact", "/kontakt/");
 
 function InfoRow({ icon, label, children }: { icon: ReactNode; label: string; children: ReactNode }) {
   return (
@@ -27,13 +25,16 @@ function InfoRow({ icon, label, children }: { icon: ReactNode; label: string; ch
   );
 }
 
-export default function ContactPage() {
+export function ContactPage({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
+  const c = t.contact;
+  const lp = (path: string) => localePath(locale, path);
   const iconCls = "size-5";
   return (
     <>
       <PageHero eyebrow={c.hero.eyebrow} title={c.hero.title} lead={c.hero.lead}>
         <div className="flex flex-wrap justify-center gap-3">
-          <ButtonLink href="/rezerwacja">{t.common.bookVisit}</ButtonLink>
+          <ButtonLink href={lp("/rezerwacja")}>{t.common.bookVisit}</ButtonLink>
           <ButtonLink href={contact.instagram.href} external variant="outline" icon="none">
             <InstagramIcon className="size-[1.1rem]" />
             {t.common.writeDirect}
@@ -77,7 +78,7 @@ export default function ContactPage() {
               </InfoRow>
               <InfoRow icon={<Clock className={iconCls} strokeWidth={1.25} aria-hidden />} label={c.details.hours}>
                 <div className="pt-1 text-body">
-                  <OpeningHours compact />
+                  <OpeningHours locale={locale} compact />
                 </div>
                 <p className="mt-2 text-xs text-muted">{t.footer.hoursNote}</p>
               </InfoRow>

@@ -62,6 +62,7 @@ export const pl = {
     skipToContent: "Przejdź do treści",
     mainNav: "Nawigacja główna",
     logoLabel: "EPILAB — strona główna",
+    language: "Wersja językowa",
   },
 
   common: {
@@ -164,6 +165,14 @@ export const pl = {
       eyebrow: "Instagram",
       title: "Zajrzyj do studia",
       text: "Kulisy pracy, sterylne narzędzia i porady dotyczące pielęgnacji skóry — na bieżąco na Instagramie.",
+      alts: [
+        "Specjalistka podczas zabiegu",
+        "Sterylne igły do elektroepilacji",
+        "Maszynka kontra elektroda",
+        "Elektroda do elektroepilacji",
+        "Certyfikat kursu elektroepilacji",
+        "Igły Ballet w sterylnych opakowaniach",
+      ],
     },
     contact: {
       eyebrow: "Zapisy",
@@ -354,6 +363,7 @@ export const pl = {
     table: {
       eyebrow: "Pełny cennik",
       title: "Wszystkie warianty",
+      scriptTitle: "Cennik",
       duration: "Czas zabiegu",
       price: "Cena",
       rate: "Za minutę",
@@ -454,6 +464,7 @@ export const pl = {
     placeholderText: "[Treść opinii klientki — do uzupełnienia prawdziwą opinią]",
     placeholderName: "[Imię]",
     placeholderBadge: "Miejsce na opinię",
+    rating: "Ocena {n} na 5",
     google: {
       title: "Opinie Google",
       text: "Wkrótce w tym miejscu pojawią się opinie z wizytówki Google studia EPILAB.",

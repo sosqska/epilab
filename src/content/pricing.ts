@@ -1,3 +1,5 @@
+import { defaultLocale, intlLocale, type Locale } from "@/i18n/config";
+
 /** Prices in PLN, from the EPILAB price list ("Cennik"). Billing is per treatment time. */
 
 export const trialSession = {
@@ -21,16 +23,21 @@ export const priceList = [
 /** Durations shown as cards in previews (the rest appear in the full table). */
 export const featuredMinutes = [10, 30, 60, 90, 120] as const;
 
-export function formatDuration(minutes: number) {
-  if (minutes < 60) return `${minutes} min`;
-  const hours = minutes / 60;
-  return `${hours.toLocaleString("pl-PL")} godz.`;
+const units: Record<Locale, { min: string; hour: string }> = {
+  pl: { min: "min", hour: "godz." },
+  uk: { min: "хв", hour: "год." },
+};
+
+export function formatDuration(minutes: number, locale: Locale = defaultLocale) {
+  const u = units[locale];
+  if (minutes < 60) return `${minutes} ${u.min}`;
+  return `${(minutes / 60).toLocaleString(intlLocale[locale])} ${u.hour}`;
 }
 
-export function formatPrice(price: number) {
-  return `${price.toLocaleString("pl-PL")} zł`;
+export function formatPrice(price: number, locale: Locale = defaultLocale) {
+  return `${price.toLocaleString(intlLocale[locale])} zł`;
 }
 
-export function pricePerMinute(minutes: number, price: number) {
-  return (price / minutes).toLocaleString("pl-PL", { maximumFractionDigits: 1 });
+export function pricePerMinute(minutes: number, price: number, locale: Locale = defaultLocale) {
+  return (price / minutes).toLocaleString(intlLocale[locale], { maximumFractionDigits: 1 });
 }

@@ -1,21 +1,25 @@
 import Image from "next/image";
 import { contact, images, type ImageKey } from "@/content/site";
 import { InstagramIcon } from "@/components/ui/icons";
+import { getDictionary } from "@/i18n";
+import type { Locale } from "@/i18n/config";
 
-const tiles: Array<{ image: ImageKey; alt: string; position?: string }> = [
-  { image: "specialist", alt: "Specjalistka podczas zabiegu", position: "50% 30%" },
-  { image: "needlesWall", alt: "Sterylne igły do elektroepilacji" },
-  { image: "razorVsElectrode", alt: "Maszynka kontra elektroda" },
-  { image: "electrodeDetail", alt: "Elektroda do elektroepilacji" },
-  { image: "certificate", alt: "Certyfikat kursu elektroepilacji" },
-  { image: "needlesSterile", alt: "Igły Ballet w sterylnych opakowaniach" },
+// Alt texts come from the dictionary (home.instagram.alts), in this order.
+const tiles: Array<{ image: ImageKey; position?: string }> = [
+  { image: "specialist", position: "50% 30%" },
+  { image: "needlesWall" },
+  { image: "razorVsElectrode" },
+  { image: "electrodeDetail" },
+  { image: "certificate" },
+  { image: "needlesSterile" },
 ];
 
 /** Static Instagram-style grid of studio photos, each linking to the profile. */
-export function InstagramGrid() {
+export function InstagramGrid({ locale }: { locale: Locale }) {
+  const alts = getDictionary(locale).home.instagram.alts;
   return (
     <ul className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-6">
-      {tiles.map(({ image, alt, position }) => (
+      {tiles.map(({ image, position }, i) => (
         <li key={image} className="reveal">
           <a
             href={contact.instagram.href}
@@ -25,7 +29,7 @@ export function InstagramGrid() {
           >
             <Image
               src={images[image].src}
-              alt={alt}
+              alt={alts[i]}
               fill
               sizes="(min-width: 1024px) 16vw, 33vw"
               className="object-cover transition-transform duration-700 group-hover:scale-105"

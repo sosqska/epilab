@@ -2,21 +2,23 @@ import Link from "next/link";
 import { MapPin, Phone } from "lucide-react";
 import { contact, credit, routes, site } from "@/content/site";
 import { getDictionary } from "@/i18n";
+import { localePath, type Locale } from "@/i18n/config";
 import { Container } from "@/components/ui/Container";
 import { ScriptNote } from "@/components/ui/ScriptNote";
 import { FacebookIcon, InstagramIcon } from "@/components/ui/icons";
 import { Logo } from "./Logo";
 import { OpeningHours } from "@/components/sections/OpeningHours";
 
-export function Footer() {
-  const t = getDictionary();
+export function Footer({ locale }: { locale: Locale }) {
+  const t = getDictionary(locale);
+  const lp = (path: string) => localePath(locale, path);
   const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-line bg-cream">
       <Container className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1.2fr_1.2fr] lg:gap-10">
         <div className="space-y-5">
-          <Logo label={t.nav.logoLabel} full />
+          <Logo label={t.nav.logoLabel} href={lp("/")} full />
           <p className="max-w-xs text-sm">{t.footer.about}</p>
           <div className="flex gap-3">
             <a
@@ -45,13 +47,13 @@ export function Footer() {
           <ul className="space-y-2 text-sm">
             {routes.map(({ href, key }) => (
               <li key={href}>
-                <Link href={href} className="transition-colors hover:text-rose-ink">
+                <Link href={lp(href)} className="transition-colors hover:text-rose-ink">
                   {t.nav[key]}
                 </Link>
               </li>
             ))}
             <li>
-              <Link href="/rezerwacja" className="transition-colors hover:text-rose-ink">
+              <Link href={lp("/rezerwacja")} className="transition-colors hover:text-rose-ink">
                 {t.common.bookVisit}
               </Link>
             </li>
@@ -86,7 +88,7 @@ export function Footer() {
 
         <div className="relative">
           <h2 className="mb-4 font-sans text-xs font-medium uppercase tracking-[0.22em] text-rose-ink">{t.footer.hoursHeading}</h2>
-          <OpeningHours compact />
+          <OpeningHours locale={locale} compact />
           <p className="mt-3 text-xs text-muted">{t.footer.hoursNote}</p>
           <ScriptNote className="mt-6 -rotate-6 text-xl md:text-2xl">{t.footer.signature}</ScriptNote>
         </div>
@@ -98,7 +100,7 @@ export function Footer() {
             © {year} {site.name}. {t.footer.rights}
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-            <Link href="/polityka-prywatnosci" className="hover:text-rose-ink">
+            <Link href={lp("/polityka-prywatnosci")} className="hover:text-rose-ink">
               {t.footer.privacy}
             </Link>
             <a

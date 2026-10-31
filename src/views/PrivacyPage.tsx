@@ -1,13 +1,13 @@
 import { getDictionary } from "@/i18n";
+import { type Locale } from "@/i18n/config";
 import { pageMetadata } from "@/lib/metadata";
 import { Section } from "@/components/ui/Section";
 import { PageHero } from "@/components/sections/PageHero";
 
-export const metadata = { ...pageMetadata("privacy", "/polityka-prywatnosci/"), robots: { index: false } };
+export const meta = (locale: Locale) => ({ ...pageMetadata(locale, "privacy", "/polityka-prywatnosci/"), robots: { index: false } });
 
-const p = getDictionary().privacy;
-
-export default function PrivacyPage() {
+export function PrivacyPage({ locale }: { locale: Locale }) {
+  const p = getDictionary(locale).privacy;
   return (
     <>
       <PageHero eyebrow="EPILAB" title={p.title} lead={p.intro} />
