@@ -70,69 +70,75 @@ export function Header() {
   const close = () => setOpen(false);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 transition-[background-color,box-shadow,border-color] duration-500",
-        scrolled || open ? "border-b border-line/70 bg-ivory/90 shadow-[0_8px_30px_-24px_rgb(110_70_62/0.4)] backdrop-blur-md" : "border-b border-transparent bg-ivory",
-      )}
-    >
-      <div className="mx-auto flex h-20 w-full max-w-[78rem] items-center justify-between gap-6 px-5 sm:px-8">
-        <Logo label={t.nav.logoLabel} onClick={close} />
-
-        <nav aria-label={t.nav.mainNav} className="hidden xl:block">
-          <ul className="flex items-center gap-8">
-            {routes.map(({ href, key }) => {
-              const active = isActive(pathname, href);
-              return (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    aria-current={active ? "page" : undefined}
-                    className={cn(
-                      "relative py-2 text-[0.9rem] tracking-wide transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:bg-rose-dark after:transition-transform after:duration-500 hover:text-rose-ink",
-                      active ? "text-ink after:scale-x-100" : "text-body after:scale-x-0 hover:after:scale-x-100",
-                    )}
-                  >
-                    {t.nav[key]}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-
-        <div className="flex items-center gap-3 sm:gap-5">
-          <ButtonLink href="/rezerwacja" className="hidden px-6 py-3 md:inline-flex">
-            {t.nav.book}
-          </ButtonLink>
-          <a
-            href={contact.instagram.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Instagram"
-            className="hidden rounded-full p-1 text-rose-ink transition-colors hover:text-ink sm:block"
-          >
-            <InstagramIcon className="size-5" />
-          </a>
-          <button
-            ref={toggleRef}
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
-            className="-mr-2 inline-flex size-11 items-center justify-center rounded-full text-ink transition-colors hover:bg-blush xl:hidden"
-          >
-            {open ? <X className="size-6" strokeWidth={1.25} /> : <Menu className="size-6" strokeWidth={1.25} />}
-          </button>
+    <>
+      <header
+        className={cn(
+          "sticky top-0 z-50 transition-[background-color,box-shadow,border-color] duration-500",
+          scrolled || open ? "border-b border-line/70 bg-ivory/90 shadow-[0_8px_30px_-24px_rgb(110_70_62/0.4)] backdrop-blur-md" : "border-b border-transparent bg-ivory",
+        )}
+      >
+        <div className="mx-auto flex h-20 w-full max-w-[78rem] items-center justify-between gap-6 px-5 sm:px-8">
+          <Logo label={t.nav.logoLabel} onClick={close} />
+  
+          <nav aria-label={t.nav.mainNav} className="hidden xl:block">
+            <ul className="flex items-center gap-8">
+              {routes.map(({ href, key }) => {
+                const active = isActive(pathname, href);
+                return (
+                  <li key={href}>
+                    <Link
+                      href={href}
+                      aria-current={active ? "page" : undefined}
+                      className={cn(
+                        "relative py-2 text-[0.9rem] tracking-wide transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:bg-rose-dark after:transition-transform after:duration-500 hover:text-rose-ink",
+                        active ? "text-ink after:scale-x-100" : "text-body after:scale-x-0 hover:after:scale-x-100",
+                      )}
+                    >
+                      {t.nav[key]}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+  
+          <div className="flex items-center gap-3 sm:gap-5">
+            {/* Wrapper handles visibility: ButtonLink's own inline-flex would override `hidden`. */}
+            <div className="hidden md:block">
+              <ButtonLink href="/rezerwacja" className="px-6 py-3">
+                {t.nav.book}
+              </ButtonLink>
+            </div>
+            <a
+              href={contact.instagram.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="hidden rounded-full p-1 text-rose-ink transition-colors hover:text-ink sm:block"
+            >
+              <InstagramIcon className="size-5" />
+            </a>
+            <button
+              ref={toggleRef}
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
+              className="-mr-2 inline-flex size-11 items-center justify-center rounded-full text-ink transition-colors hover:bg-blush xl:hidden"
+            >
+              {open ? <X className="size-6" strokeWidth={1.25} /> : <Menu className="size-6" strokeWidth={1.25} />}
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
 
+      {/* Kept outside <header>: its backdrop-filter would become the containing block for this fixed panel. */}
       <div
         id="mobile-menu"
         ref={panelRef}
         hidden={!open}
-        className="fixed inset-x-0 top-20 bottom-0 overflow-y-auto bg-ivory xl:hidden"
+        className="fixed inset-x-0 top-20 bottom-0 z-40 overflow-y-auto bg-ivory xl:hidden"
       >
         <div className="relative mx-auto flex min-h-full max-w-[78rem] flex-col px-5 pt-6 pb-10 sm:px-8">
           <Sprig className="pointer-events-none absolute right-6 bottom-28 w-24 rotate-12 text-blush-deep" />
@@ -175,6 +181,6 @@ export function Header() {
           </div>
         </div>
       </div>
-    </header>
+    </>
   );
 }

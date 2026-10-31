@@ -33,7 +33,7 @@ export function PageHero({
         <Sprig className="pointer-events-none absolute -right-2 bottom-4 w-24 rotate-[160deg] text-blush-deep md:right-[9%] md:w-32" />
         <Container className="relative text-center">
           <Eyebrow className="animate-rise mb-5">{eyebrow}</Eyebrow>
-          <h1 className="animate-rise mx-auto max-w-3xl text-5xl [animation-delay:80ms] md:text-6xl lg:text-7xl">{title}</h1>
+          <h1 className="animate-rise mx-auto max-w-3xl text-[clamp(2.3rem,10vw,3rem)] [animation-delay:80ms] md:text-6xl lg:text-7xl">{title}</h1>
           <p className="animate-rise mx-auto mt-6 max-w-2xl text-lg [animation-delay:160ms]">{lead}</p>
           {children && <div className="animate-rise mt-9 [animation-delay:240ms]">{children}</div>}
         </Container>
@@ -46,7 +46,7 @@ export function PageHero({
       <Container className="grid items-center gap-12 py-16 md:py-20 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
         <div className="relative">
           <Eyebrow className="animate-rise mb-5">{eyebrow}</Eyebrow>
-          <h1 className="animate-rise text-5xl [animation-delay:80ms] md:text-6xl lg:text-7xl">{title}</h1>
+          <h1 className="animate-rise text-[clamp(2.3rem,10vw,3rem)] [animation-delay:80ms] md:text-6xl lg:text-7xl">{title}</h1>
           <p className="animate-rise mt-6 max-w-xl text-lg [animation-delay:160ms]">{lead}</p>
           {children && <div className="animate-rise mt-9 [animation-delay:240ms]">{children}</div>}
         </div>

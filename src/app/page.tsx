@@ -40,7 +40,7 @@ export default function HomePage() {
         <Container className="relative grid min-h-[min(46rem,calc(100svh-5rem))] items-center gap-10 py-14 lg:grid-cols-2 lg:py-0">
           <div className="relative z-10 lg:py-24 lg:pr-6">
             <Eyebrow className="animate-rise mb-6">{h.hero.eyebrow}</Eyebrow>
-            <h1 className="animate-rise text-[3.4rem] leading-[1.02] [animation-delay:80ms] sm:text-7xl lg:text-[5.4rem]">
+            <h1 className="animate-rise text-[clamp(2.4rem,11vw,3.4rem)] leading-[1.02] [animation-delay:80ms] sm:text-7xl lg:text-[5.4rem]">
               {h.hero.titleA}
               <span className="block font-normal text-rose-dark italic">{h.hero.titleB}</span>
             </h1>
