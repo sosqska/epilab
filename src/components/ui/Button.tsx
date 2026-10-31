@@ -37,6 +37,7 @@ export function ButtonLink({
   icon = variant === "primary" ? "calendar" : "arrow",
   className,
   external,
+  onClick,
 }: {
   href: string;
   children: ReactNode;
@@ -44,17 +45,18 @@ export function ButtonLink({
   icon?: Adornment;
   className?: string;
   external?: boolean;
+  onClick?: () => void;
 }) {
   const cls = cn(base, variants[variant], className);
   const content = <Adorned icon={icon}>{children}</Adorned>;
   if (external)
     return (
-      <a href={href} className={cls} target="_blank" rel="noopener noreferrer">
+      <a href={href} className={cls} target="_blank" rel="noopener noreferrer" onClick={onClick}>
         {content}
       </a>
     );
   return (
-    <Link href={href} className={cls}>
+    <Link href={href} className={cls} onClick={onClick}>
       {content}
     </Link>
   );

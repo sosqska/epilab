@@ -26,7 +26,12 @@ export const site = {
 export const contact = {
   phone: { display: "+48 [numer telefonu]", href: "tel:+48000000000" },
   email: { display: "[adres e-mail]", href: "mailto:[adres-e-mail]" },
-  instagram: { handle: "@epilab.as", href: "https://www.instagram.com/epilab.as/" },
+  instagram: {
+    handle: "@epilab.as",
+    href: "https://www.instagram.com/epilab.as/",
+    // Opens the direct-message thread (app on phones, instagram.com/direct on desktop).
+    dm: "https://ig.me/m/epilab.as",
+  },
   facebook: { handle: "[profil Facebook]", href: "https://www.facebook.com/" },
   address: {
     street: "ul. [adres studia]",

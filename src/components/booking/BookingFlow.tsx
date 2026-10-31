@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
-import { ArrowLeft, ArrowRight, CalendarDays, Check, ChevronLeft, ChevronRight, CircleCheck, Clock, LoaderCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarDays, Check, ChevronLeft, ChevronRight, CircleCheck, Clock, Copy, LoaderCircle } from "lucide-react";
 import { contact } from "@/content/site";
 import { formatDuration, formatPrice, priceList, trialSession } from "@/content/pricing";
 import { getDictionary } from "@/i18n";
-import { bookingWindowDays, fromISODate, getSlots, startOfToday, toISODate } from "@/lib/availability";
-import { isBookingDemo, submitBooking } from "@/lib/submit";
+import { bookingWindowDays, firstAvailableDate, fromISODate, getSlots, startOfToday, toISODate } from "@/lib/availability";
+import { bookingViaInstagram, submitBooking } from "@/lib/submit";
+import { copyText } from "@/lib/clipboard";
 import { focusFirstError, isEmail, isPhone, type Errors } from "@/lib/validation";
 import { cn } from "@/lib/cn";
 import { Button, ButtonLink } from "@/components/ui/Button";
@@ -65,6 +66,7 @@ export function BookingFlow() {
   const [errors, setErrors] = useState<Errors<DetailKey>>({});
   const [stepError, setStepError] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [copied, setCopied] = useState<boolean | null>(null);
   const [month, setMonth] = useState(() => {
     const d = startOfToday();
     return new Date(d.getFullYear(), d.getMonth(), 1);
@@ -107,6 +109,11 @@ export function BookingFlow() {
   function next() {
     setStepError(null);
     if (step === 0 && !service) return setStepError(b.service.title);
+    if (step === 0 && service && !date) {
+      // Open the calendar on the first month that has a free slot (e.g. late in the month).
+      const first = firstAvailableDate(service.minutes);
+      if (first) setMonth(new Date(first.getFullYear(), first.getMonth(), 1));
+    }
     if (step === 1 && (!date || !time)) return setStepError(!date ? b.date.pickDayFirst : b.date.timeTitle);
     if (step === 2) {
       const found = validateDetails(details);
@@ -147,6 +154,37 @@ export function BookingFlow() {
     }
   }
 
+  const dateLabel = date ? dateFormatter.format(fromISODate(date)) : null;
+
+  // Plain-text booking request pasted into the Instagram chat.
+  const message = useMemo(() => {
+    if (!service || !date || !time) return "";
+    const m = b.instagram.message;
+    const capitalised = dateLabel ? dateLabel.charAt(0).toUpperCase() + dateLabel.slice(1) : "";
+    return [
+      m.greeting,
+      "",
+      `${m.service}: ${service.title} · ${formatDuration(service.minutes)} (${service.price})`,
+      areas.length > 0 ? `${m.areas}: ${areas.join(", ")}` : null,
+      `${m.date}: ${capitalised}, ${time}`,
+      `${m.name}: ${details.name.trim()}`,
+      `${m.phone}: ${details.phone.trim()}`,
+      details.email.trim() ? `${m.email}: ${details.email.trim()}` : null,
+      details.firstVisit ? `${m.firstVisit}: ${m.yes}` : null,
+      details.notes.trim() ? `${m.notes}: ${details.notes.trim()}` : null,
+      "",
+      m.closing,
+    ]
+      .filter((line) => line !== null)
+      .join("\n");
+  }, [service, date, time, dateLabel, areas, details]);
+
+  // Runs inside the link's click, so the copy happens before the browser switches to Instagram.
+  function sendViaInstagram() {
+    setCopied(copyText(message));
+    setStatus("success");
+  }
+
   function reset() {
     setStep(0);
     setServiceKey(null);
@@ -155,16 +193,71 @@ export function BookingFlow() {
     setTime(null);
     setDetails(emptyDetails);
     setErrors({});
+    setCopied(null);
     setStatus("idle");
   }
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (step < 3) next();
-    else void confirm();
+    else if (!bookingViaInstagram) void confirm();
   }
 
-  const dateLabel = date ? dateFormatter.format(fromISODate(date)) : null;
+  if (status === "success" && bookingViaInstagram) {
+    const ig = b.instagram;
+    return (
+      <div ref={rootRef} className="scroll-mt-28">
+        <div role="status" className="animate-rise mx-auto max-w-2xl rounded-[2rem] border border-line bg-white/80 p-6 shadow-soft sm:p-10 md:p-14">
+          <span className="mx-auto flex size-20 items-center justify-center rounded-full bg-blush text-rose-ink">
+            <InstagramIcon className="size-9" />
+          </span>
+          <h2 ref={headingRef} tabIndex={-1} className="mt-6 text-center text-4xl outline-none md:text-5xl">
+            {ig.successTitle}
+          </h2>
+          {copied === false ? (
+            <div className="mt-6">
+              <FormAlert tone="error">{ig.copyFailed}</FormAlert>
+            </div>
+          ) : (
+            <>
+              <p className="mx-auto mt-4 max-w-md text-center">{ig.successText.replace("{handle}", contact.instagram.handle)}</p>
+              <ol className="mx-auto mt-6 max-w-sm space-y-3">
+                {ig.steps.map((s, i) => (
+                  <li key={s} className="flex items-center gap-4">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-rose-dark font-serif text-white">{i + 1}</span>
+                    <span className="text-ink">{s}</span>
+                  </li>
+                ))}
+              </ol>
+            </>
+          )}
+
+          <pre className="mt-8 max-h-72 overflow-auto rounded-2xl bg-cream p-5 font-sans text-sm leading-relaxed whitespace-pre-wrap text-ink">
+            {message}
+          </pre>
+
+          <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
+            <ButtonLink href={contact.instagram.dm} external icon="none" onClick={() => setCopied(copyText(message))}>
+              <InstagramIcon className="size-[1.1rem]" />
+              {ig.openAgain}
+            </ButtonLink>
+            <Button variant="outline" onClick={() => setCopied(copyText(message))}>
+              {copied ? <Check className="size-4" strokeWidth={2} aria-hidden /> : <Copy className="size-4" strokeWidth={1.5} aria-hidden />}
+              {copied ? ig.copied : ig.copyAgain}
+            </Button>
+          </div>
+          <div className="mt-6 flex justify-center gap-6">
+            <Button variant="ghost" onClick={reset}>
+              {b.success.another}
+            </Button>
+            <ButtonLink href="/" variant="ghost" icon="arrow">
+              {b.success.home}
+            </ButtonLink>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (status === "success") {
     return (
@@ -182,7 +275,6 @@ export function BookingFlow() {
             <SummaryRow label={b.summary.date} value={`${dateLabel}, ${time}`} />
             <SummaryRow label={b.summary.price} value={service?.price ?? ""} />
           </dl>
-          {isBookingDemo && <p className="mx-auto mt-6 max-w-md text-xs text-muted">{b.success.demo}</p>}
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button variant="outline" onClick={reset}>
               {b.success.another}
@@ -199,14 +291,13 @@ export function BookingFlow() {
 
   return (
     <div ref={rootRef} className="scroll-mt-28">
-      {isBookingDemo && (
+      {bookingViaInstagram && (
         <div className="mb-8">
           <FormAlert tone="info">
-            {b.demoNotice}{" "}
-            <a href={contact.instagram.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-rose-ink underline underline-offset-2">
-              <InstagramIcon className="size-3.5" />
-              Instagram
-            </a>
+            <span className="flex gap-2.5">
+              <InstagramIcon className="mt-0.5 size-4 shrink-0 text-rose-ink" />
+              {b.instagram.notice}
+            </span>
           </FormAlert>
         </div>
       )}
@@ -466,6 +557,14 @@ export function BookingFlow() {
                 </ReviewRow>
               </dl>
               <p className="mt-5 text-sm text-muted">{b.summary.policy}</p>
+              {bookingViaInstagram && (
+                <details className="group mt-6 rounded-2xl border border-line bg-cream/60">
+                  <summary className="cursor-pointer list-none px-5 py-4 text-sm text-rose-ink [&::-webkit-details-marker]:hidden">
+                    <span className="inline-block transition-transform group-open:rotate-90">›</span> {b.instagram.previewTitle}
+                  </summary>
+                  <pre className="px-5 pb-5 font-sans text-sm leading-relaxed whitespace-pre-wrap text-ink">{message}</pre>
+                </details>
+              )}
             </div>
           )}
 
@@ -484,6 +583,15 @@ export function BookingFlow() {
             ) : (
               <span />
             )}
+            {step === 3 && bookingViaInstagram ? (
+              <div className="flex flex-col items-end gap-2">
+                <ButtonLink href={contact.instagram.dm} external icon="none" onClick={sendViaInstagram}>
+                  <InstagramIcon className="size-[1.1rem]" />
+                  {b.instagram.send}
+                </ButtonLink>
+                <p className="max-w-xs text-right text-xs text-muted">{b.instagram.hint.replace("{handle}", contact.instagram.handle)}</p>
+              </div>
+            ) : (
             <Button type="submit" disabled={status === "sending"} aria-busy={status === "sending"}>
               {status === "sending" ? (
                 <>
@@ -501,6 +609,7 @@ export function BookingFlow() {
                 b.confirm
               )}
             </Button>
+            )}
           </div>
         </form>
 

@@ -1,5 +1,6 @@
 /**
- * Demo availability for the booking UI. Swap `getSlots` for a call to a real booking system
+ * Bookable start times within opening hours. They are preferences, not live availability: the studio
+ * confirms the slot when replying. Swap `getSlots` for a booking system's API to show real availability
  * (it only needs to return "HH:MM" start times for a given day and duration).
  */
 
@@ -32,16 +33,6 @@ export function startOfToday() {
   return d;
 }
 
-// Small deterministic hash so the same day always shows the same "booked" slots.
-function hash(str: string) {
-  let h = 2166136261;
-  for (let i = 0; i < str.length; i++) {
-    h ^= str.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return h >>> 0;
-}
-
 export function getSlots(iso: string, durationMinutes: number, now = new Date()): string[] {
   const day = fromISODate(iso);
   const today = startOfToday();
@@ -57,8 +48,17 @@ export function getSlots(iso: string, durationMinutes: number, now = new Date())
     const slotTime = new Date(day);
     slotTime.setMinutes(m);
     if (slotTime.getTime() < now.getTime() + 2 * 60 * 60 * 1000) continue; // at least 2 h notice
-    if (hash(`${iso}-${m}`) % 100 < 45) continue; // pretend ~45% of slots are taken
     slots.push(`${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`);
   }
   return slots;
+}
+
+/** First day within the booking window that has at least one slot for this duration. */
+export function firstAvailableDate(durationMinutes: number): Date | null {
+  const day = startOfToday();
+  for (let i = 0; i <= bookingWindowDays; i++) {
+    if (getSlots(toISODate(day), durationMinutes).length > 0) return day;
+    day.setDate(day.getDate() + 1);
+  }
+  return null;
 }

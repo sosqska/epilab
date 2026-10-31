@@ -3,7 +3,8 @@
  *
  * - With NEXT_PUBLIC_CONTACT_ENDPOINT / NEXT_PUBLIC_BOOKING_ENDPOINT set (e.g. Formspree, a Make/Zapier webhook,
  *   or a booking system's API), payloads are POSTed there as JSON.
- * - Without them the forms run in demo mode: they validate, wait briefly and report success, and the UI says so.
+ * - Without them the contact form runs in demo mode, and booking requests are sent as an Instagram DM
+ *   (the text is copied and the chat opened — Instagram does not allow prefilling messages from a website).
  */
 
 export type ContactPayload = {
@@ -32,7 +33,7 @@ const contactEndpoint = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT;
 const bookingEndpoint = process.env.NEXT_PUBLIC_BOOKING_ENDPOINT;
 
 export const isContactDemo = !contactEndpoint;
-export const isBookingDemo = !bookingEndpoint;
+export const bookingViaInstagram = !bookingEndpoint;
 
 async function post(url: string, body: unknown) {
   const res = await fetch(url, {
