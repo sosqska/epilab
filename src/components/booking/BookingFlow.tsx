@@ -53,6 +53,43 @@ function validateDetails(d: Details): Errors<DetailKey> {
   return e;
 }
 
+// Unfinished booking kept per browser tab, so leaving the page (privacy policy, reload) loses nothing.
+const DRAFT_KEY = "epilab-booking-draft";
+
+type Draft = {
+  step: number;
+  serviceKey: string | null;
+  areas: string[];
+  date: string | null;
+  time: string | null;
+  details: Details;
+};
+
+function readDraft(): Draft | null {
+  try {
+    const raw = sessionStorage.getItem(DRAFT_KEY);
+    return raw ? (JSON.parse(raw) as Draft) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeDraft(draft: Draft) {
+  try {
+    const empty = !draft.serviceKey && !draft.details.name && !draft.details.phone;
+    if (empty) sessionStorage.removeItem(DRAFT_KEY);
+    else sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  } catch {
+    // Storage can be unavailable (private mode, blocked site data); the form still works, just without a draft.
+  }
+}
+
+function clearDraft() {
+  try {
+    sessionStorage.removeItem(DRAFT_KEY);
+  } catch {}
+}
+
 const dateFormatter = new Intl.DateTimeFormat("pl-PL", { weekday: "long", day: "numeric", month: "long" });
 const monthFormatter = new Intl.DateTimeFormat("pl-PL", { month: "long", year: "numeric" });
 
@@ -79,13 +116,37 @@ export function BookingFlow() {
 
   const service = services.find((s) => s.key === serviceKey) ?? null;
 
-  // /rezerwacja/?usluga=trial preselects a service (links from the price list).
+  // After hydration: restore an unfinished booking (e.g. after opening the privacy policy or reloading),
+  // otherwise apply a ?usluga=trial preset from the price list.
   useEffect(() => {
+    const draft = readDraft();
+    if (draft) {
+      /* eslint-disable react-hooks/set-state-in-effect -- one-off restore after hydration */
+      setServiceKey(draft.serviceKey);
+      setAreas(draft.areas);
+      setDetails({ ...emptyDetails, ...draft.details });
+      const restoredService = services.find((s) => s.key === draft.serviceKey);
+      // Keep the chosen slot only if it is still bookable (it may be in the past by now).
+      if (restoredService && draft.date && draft.time && getSlots(draft.date, restoredService.minutes).includes(draft.time)) {
+        setDate(draft.date);
+        setTime(draft.time);
+        const d = fromISODate(draft.date);
+        setMonth(new Date(d.getFullYear(), d.getMonth(), 1));
+        setStep(draft.step);
+      } else {
+        setStep(Math.min(draft.step, restoredService ? 1 : 0));
+      }
+      return;
+    }
     const preset = new URLSearchParams(window.location.search).get("usluga");
     const key = preset === "trial" ? "trial" : preset ? `m${preset}` : null;
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-off read of the URL after hydration
     if (key && services.some((s) => s.key === key)) setServiceKey(key);
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, []);
+
+  useEffect(() => {
+    if (status !== "success") writeDraft({ step, serviceKey, areas, date, time, details });
+  }, [step, serviceKey, areas, date, time, details, status]);
 
   // Move focus to the new step's heading so keyboard and screen-reader users land in the right place.
   useEffect(() => {
@@ -182,6 +243,7 @@ export function BookingFlow() {
   // Runs inside the link's click, so the copy happens before the browser switches to Instagram.
   function sendViaInstagram() {
     setCopied(copyText(message));
+    clearDraft();
     setStatus("success");
   }
 
@@ -194,6 +256,7 @@ export function BookingFlow() {
     setDetails(emptyDetails);
     setErrors({});
     setCopied(null);
+    clearDraft();
     setStatus("idle");
   }
 
@@ -232,7 +295,7 @@ export function BookingFlow() {
             </>
           )}
 
-          <pre className="mt-8 max-h-72 overflow-auto rounded-2xl bg-cream p-5 font-sans text-sm leading-relaxed whitespace-pre-wrap text-ink">
+          <pre className="mt-8 rounded-2xl bg-cream p-5 font-sans text-sm leading-relaxed whitespace-pre-wrap text-ink">
             {message}
           </pre>
 
@@ -514,7 +577,7 @@ export function BookingFlow() {
                 </CheckboxField>
                 <CheckboxField id="b-consent" checked={details.consent} onChange={(e) => setDetail("consent", e.target.checked)} error={errors.consent}>
                   {b.details.consent}{" "}
-                  <Link href="/polityka-prywatnosci" className="text-rose-ink underline underline-offset-2">
+                  <Link href="/polityka-prywatnosci" target="_blank" rel="noopener" className="text-rose-ink underline underline-offset-2">
                     {b.details.consentLink}
                   </Link>
                   .<span className="text-rose-ink"> *</span>

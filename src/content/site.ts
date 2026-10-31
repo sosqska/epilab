@@ -16,6 +16,9 @@ export function absoluteUrl(path: string) {
   return `${siteUrl}${path}`;
 }
 
+/** Studio that built the site — credited in the footer. */
+export const credit = { name: "KeyBroski", href: "https://sosqska.github.io/neon-pulse-portfolio/" };
+
 export const site = {
   name: "EPILAB",
   tagline: "Elektroepilacja Kielce",

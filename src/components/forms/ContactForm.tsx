@@ -153,7 +153,7 @@ export function ContactForm() {
 
       <CheckboxField id="consent" checked={values.consent} onChange={(e) => set("consent", e.target.checked)} error={errors.consent}>
         {f.consent}{" "}
-        <Link href="/polityka-prywatnosci" className="text-rose-ink underline underline-offset-2">
+        <Link href="/polityka-prywatnosci" target="_blank" rel="noopener" className="text-rose-ink underline underline-offset-2">
           {f.consentLink}
         </Link>
         .<span className="text-rose-ink"> *</span>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MapPin, Phone } from "lucide-react";
-import { contact, routes, site } from "@/content/site";
+import { contact, credit, routes, site } from "@/content/site";
 import { getDictionary } from "@/i18n";
 import { Container } from "@/components/ui/Container";
 import { ScriptNote } from "@/components/ui/ScriptNote";
@@ -97,9 +97,23 @@ export function Footer() {
           <p>
             © {year} {site.name}. {t.footer.rights}
           </p>
-          <Link href="/polityka-prywatnosci" className="hover:text-rose-ink">
-            {t.footer.privacy}
-          </Link>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+            <Link href="/polityka-prywatnosci" className="hover:text-rose-ink">
+              {t.footer.privacy}
+            </Link>
+            <a
+              href={credit.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-1.5 transition-colors hover:text-rose-ink"
+            >
+              {t.footer.madeBy}
+              <span className="font-medium tracking-wide text-ink transition-colors group-hover:text-rose-ink">{credit.name}</span>
+              <span className="transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden>
+                ↗
+              </span>
+            </a>
+          </div>
         </Container>
       </div>
     </footer>

@@ -94,6 +94,7 @@ export const pl = {
     hoursNote: "Wizyty po wcześniejszym umówieniu",
     rights: "Wszelkie prawa zastrzeżone.",
     privacy: "Polityka prywatności",
+    madeBy: "Projekt i realizacja",
     signature: "Do zobaczenia\nw Kielcach",
   },
 
