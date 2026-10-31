@@ -17,7 +17,7 @@ export const pl = {
       services: {
         title: "Usługi — elektroepilacja twarzy i ciała",
         description:
-          "Elektroepilacja brwi, wąsika, brody, pach, bikini, nóg i innych partii ciała. Jak przebiega zabieg, efekty i dla kogo jest ta metoda.",
+          "Elektroepilacja brwi, wąsika, podbródka, pach, bikini, nóg i innych partii ciała. Jak przebiega zabieg, efekty i dla kogo jest ta metoda.",
       },
       pricing: {
         title: "Cennik",
@@ -295,7 +295,7 @@ export const pl = {
           items: [
             { title: "Brwi", text: "Modelowanie kształtu i linia między brwiami." },
             { title: "Górna warga", text: "Delikatny „wąsik” usunięty na stałe." },
-            { title: "Broda i podbródek", text: "Także pojedyncze, grube włosy hormonalne." },
+            { title: "Podbródek", text: "Także pojedyncze, grube włosy hormonalne." },
             { title: "Policzki i baczki", text: "Wyrównanie linii owłosienia twarzy." },
             { title: "Szyja", text: "Przód i kark — precyzyjnie wyznaczona linia." },
           ],
@@ -308,7 +308,7 @@ export const pl = {
             { title: "Bikini", text: "Linia klasyczna lub wybrane obszary." },
             { title: "Nogi", text: "Uda, łydki, kolana, stopy i palce." },
             { title: "Brzuch", text: "Linia pępka i okolice brzucha." },
-            { title: "Inne partie", text: "Plecy, klatka piersiowa, okolice brodawek." },
+            { title: "Inne partie", text: "Plecy, dekolt, okolice brodawek." },
           ],
         },
       ],
@@ -334,7 +334,7 @@ export const pl = {
         "chcesz precyzyjnie wymodelować brwi lub linię bikini,",
         "szukasz rozwiązania na zawsze, a nie na kilka dni.",
       ],
-      note: "Elektroepilacja jest dla kobiet i mężczyzn. Przed pierwszą wizytą sprawdź listę przeciwwskazań.",
+      note: "Studio przyjmuje wyłącznie kobiety. Przed pierwszą wizytą sprawdź listę przeciwwskazań.",
       faqLink: "Przeciwwskazania w FAQ",
       imageAlt: "Porównanie: maszynka do golenia i elektroda do elektroepilacji",
     },
@@ -447,9 +447,9 @@ export const pl = {
         ],
       },
       {
-        id: "mezczyzni", q: "Czy elektroepilacja jest dla mężczyzn?",
+        id: "mezczyzni", q: "Czy przyjmujecie mężczyzn?",
         a: [
-          "Oczywiście. Elektroepilację wykonujemy u kobiet i mężczyzn — np. w okolicach brody, szyi, pleców czy uszu.",
+          "Nie. EPILAB to studio wyłącznie dla kobiet — dzięki temu możesz czuć się u nas swobodnie i komfortowo.",
         ],
       },
     ],
@@ -581,7 +581,7 @@ export const pl = {
       regular: "Elektroepilacja",
       areas: "Obszary zabiegu (opcjonalnie)",
       areasHint: "Pomoże nam to przygotować się do wizyty.",
-      areaOptions: ["Brwi", "Górna warga", "Broda", "Policzki", "Szyja", "Pachy", "Ręce", "Bikini", "Nogi", "Brzuch", "Inne"],
+      areaOptions: ["Brwi", "Górna warga", "Podbródek", "Policzki", "Szyja", "Pachy", "Ręce", "Bikini", "Nogi", "Brzuch", "Inne"],
     },
     date: {
       title: "Wybierz dzień",
