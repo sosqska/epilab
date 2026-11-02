@@ -13,4 +13,12 @@ export type Review = {
   screenshot?: string;
 };
 
-export const reviews: Review[] = [];
+export const reviews: Review[] = [
+  {
+    // Instagram DM from @_stiffnichek_, a week after the treatment (cropped to the message only).
+    text: "Wszystko jest super, jestem bardzo zadowolona. Nie pojawiły się żadne niepożądane reakcje ani problemy. Stosuję się do wszystkich zaleceń i wykonuję pielęgnację tak, jak mi mówiłaś. Jak na razie wszystko idealnie, dziękuję ci bardzo jeszcze raz.",
+    author: "Inna",
+    source: "instagram",
+    screenshot: "reviews/inna.webp",
+  },
+];

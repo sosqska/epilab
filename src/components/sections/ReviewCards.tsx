@@ -32,6 +32,22 @@ export function ReviewCards({ locale, limit, className }: { locale: Locale; limi
         >
           <Quote className="size-6 text-rose" strokeWidth={1} aria-hidden />
           <blockquote className="mt-4 flex-1 font-serif text-xl leading-snug text-ink">{review.text}</blockquote>
+          {review.screenshot && (
+            <a
+              href={`${basePath}/images/${review.screenshot}`}
+              target="_blank"
+              rel="noopener"
+              className="group mt-5 block overflow-hidden rounded-2xl border border-line bg-ink"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element -- small static screenshot, shown as-is */}
+              <img
+                src={`${basePath}/images/${review.screenshot}`}
+                alt={`${r.screenshot}: ${review.author}`}
+                loading="lazy"
+                className="block h-auto w-full opacity-95 transition-transform duration-700 group-hover:scale-[1.02]"
+              />
+            </a>
+          )}
           <div className="mt-6 flex items-center justify-between gap-4 border-t border-line pt-4">
             <p className="text-sm text-ink">{review.author}</p>
             {review.rating && <Stars rating={review.rating} label={r.rating} />}
