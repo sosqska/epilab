@@ -41,5 +41,10 @@ NEXT_PUBLIC_SITE_URL=https://ваш-домен.pl   # для canonical, sitemap,
 Новый язык (например EN): словарь `en.ts`, регистрация в `src/i18n/index.ts` и `config.ts`, папка `src/app/en/` по образцу `src/app/uk/`.
 
 ## Деплой на GitHub Pages
-`npm run deploy` — собирает сайт с `basePath=/epilab` и выкладывает `out/` в ветку `gh-pages`.
-Адрес: https://sosqska.github.io/epilab/
+`npm run deploy` — собирает сайт и выкладывает `out/` в ветку `gh-pages`.
+Адрес: https://epilab-kielce.pl (свой домен; файл `CNAME` скрипт создаёт при каждом деплое).
+Чтобы вернуться на адрес https://sosqska.github.io/epilab/, поставьте `domain = ""` в `scripts/deploy.mjs` — тогда сборка снова пойдёт с `basePath=/epilab`.
+
+DNS домена (home.pl): A-записи `@` → 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153;
+AAAA-записи `@` → 2606:50c0:8000::153, 2606:50c0:8001::153, 2606:50c0:8002::153, 2606:50c0:8003::153;
+CNAME `www` → sosqska.github.io.

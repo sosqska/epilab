@@ -15,7 +15,7 @@ export function absoluteUrl(path: string) {
 }
 
 /** Studio that built the site — credited in the footer. */
-export const credit = { name: "KeyBroski", href: "https://sosqska.github.io/neon-pulse-portfolio/" };
+export const credit = { name: "KeyBroski", href: "https://keybroski.pl/" };
 
 export const site = {
   name: "EPILAB",
