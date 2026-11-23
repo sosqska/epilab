@@ -17,7 +17,8 @@ export const shareTwitter = { card: "summary" as const, images: ["/og-logo.png"]
 /** hreflang alternates for a locale-free path such as "/cennik/". */
 export function languageAlternates(path: string) {
   return {
-    ...Object.fromEntries(locales.map((l) => [l, absoluteUrl(localePath(l, path))])),
+    // trailing slash like the real page URLs (/uk/) — no redirects for search engines
+    ...Object.fromEntries(locales.map((l) => [l, absoluteUrl(localePath(l, path)).replace(/([^/])$/, "$1/")])),
     "x-default": absoluteUrl(path),
   };
 }
