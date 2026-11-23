@@ -4,6 +4,7 @@ import { RevealObserver } from "@/components/layout/RevealObserver";
 import { siteUrl } from "@/content/site";
 import { getDictionary } from "@/i18n";
 import { defaultLocale, ogLocale } from "@/i18n/config";
+import { shareImages, shareTwitter } from "@/lib/metadata";
 import "./globals.css";
 
 // All three families cover latin-ext (Polish) and cyrillic (Ukrainian).
@@ -39,7 +40,9 @@ export const metadata: Metadata = {
     siteName: "EPILAB",
     title: t.meta.siteTitle,
     description: t.meta.description,
+    images: shareImages,
   },
+  twitter: { ...shareTwitter, title: t.meta.siteTitle, description: t.meta.description },
 };
 
 export const viewport: Viewport = {
