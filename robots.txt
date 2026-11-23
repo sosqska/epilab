@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+
+Sitemap: https://epilab-kielce.pl/sitemap.xml
